@@ -1,0 +1,111 @@
+.timeline-col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  min-width: 40px;
+  padding-top: 10px;
+}
+
+.experience-timeline {
+  position: relative;
+  width: 32px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-card-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 32px;
+  margin-right: 0.5em;
+  position: relative;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.timeline-point-container {
+  position: relative;
+  height: 100px; /* hauteur entre les points, ajustez selon vos besoins */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-point {
+  width: 18px;
+  height: 18px;
+  background: #c770f0;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px #c770f066;
+  transition: box-shadow 0.3s, background 0.3s;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.timeline-point:hover {
+  background: #be50f4;
+  box-shadow: 0 0 0 8px #c770f099;
+}
+
+.timeline-line {
+  width: 4px;
+  flex: 1;
+  background: linear-gradient(to bottom, #c770f0 60%, #be50f4 100%);
+  margin-top: 0;
+  z-index: 1;
+  border-radius: 2px;
+}
+
+.timeline-vertical-col {
+  position: relative;
+  min-width: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.timeline-vertical {
+  position: relative;
+  width: 32px;
+  margin: 0 auto;
+}
+
+.timeline-vertical-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #c770f0 60%, #be50f4 100%);
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.timeline-vertical-point {
+  width: 18px;
+  height: 18px;
+  background: #c770f0;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px #c770f066;
+  transition: box-shadow 0.3s, background 0.3s;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.timeline-vertical-point:hover {
+  background: #be50f4;
+  box-shadow: 0 0 0 8px #c770f099;
+}
+
+.timeline-vertical-point:hover {
+  background: #be50f4;
+  box-shadow: 0 0 0 8px #c770f099;
+}
