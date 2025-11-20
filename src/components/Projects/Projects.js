@@ -13,6 +13,8 @@ import bigs from "../../Assets/Projects/Bigs.png";
 import dewiniVid from "../../Assets/Projects/Dewini_Vid.mp4";
 import excelVid from "../../Assets/Projects/Excel_Vid.mp4";
 import bigsVid from "../../Assets/Projects/BigS_vid.mp4";
+import ekitabVid from "../../Assets/Projects/Ekitab_Vid.mp4";
+import VideoPlayer from "./VideoPlayer";
 
 function Projects() {
   return (
@@ -41,6 +43,7 @@ function Projects() {
               title="E-Kitab"
               description="E-KITAB est une plateforme en ligne moderne qui permet de louer et acheter des livres facilement. Elle propose une interface intuitive, accessible partout, et adaptée à différents rôles : admin, auteur et utilisateur. Construite avec React, Node.js et MongoDB, elle offre une gestion simple des livres et des commandes. Son objectif est de rendre la lecture plus pratique, connectée et ouverte à tous."
               ghLink="https://github.com/ShedlyLaad/pp-ebooks"
+              demoVideo={ekitabVid}
             />
           </Col>
 
