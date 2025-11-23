@@ -67,7 +67,7 @@ function ResumeNew() {
                 rel="noreferrer"
                 style={{
                   background: "#23234f",
-                  color: "#0a66c2",
+                  color: "#6c63ff",
                   borderRadius: "50%",
                   width: 48,
                   height: 48,

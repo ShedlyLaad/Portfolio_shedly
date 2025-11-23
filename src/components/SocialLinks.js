@@ -5,6 +5,14 @@ import { AiFillGithub, AiOutlineMail } from "react-icons/ai";
 import { FaLinkedinIn, FaDownload } from "react-icons/fa";
 import myImg from "../Assets/me.png";
 import pdf from "../Assets/CV-Chedly Laadhiby.pdf";
+
+const COLORS = {
+  bgDark: "#181824",
+  card: "#23234f",
+  accent: "#6c63ff",
+  muted: "#bdbdbd",
+  white: "#fff",
+};
 const safeNode = (value) => {
   if (React.isValidElement(value)) return value;
   if (typeof value === "string" || typeof value === "number") return value;
@@ -14,15 +22,15 @@ const safeNode = (value) => {
 function SocialLinks() {
   return (
     <div
-      id="contact" // Ajout de l'id pour l'ancre
+      id="contact"
       style={{
         minHeight: "80vh",
-        background: "#181824", // couleur sombre, à adapter selon votre thème principal
-        color: "#fff",
+        background: COLORS.bgDark,
+        color: COLORS.white,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "40px 0"
+        padding: "40px 0",
       }}
     >
       <Row className="w-100" style={{ maxWidth: 1100 }}>
@@ -32,13 +40,13 @@ function SocialLinks() {
           className="d-flex flex-column justify-content-center align-items-start"
         >
           {/* Bloc Identité */}
-          <h1 className="fw-bold mb-1" style={{ fontSize: "2.8rem", color: "#6c63ff" }}>
+          <h1 className="fw-bold mb-1" style={{ fontSize: "2.8rem", color: COLORS.accent }}>
             Trouver Moi !
           </h1>
           <h3 className="fw-semibold mb-2" style={{ fontSize: "1.5rem" }}>
             Développeur Full Stack
           </h3>
-          <p className="mb-4" style={{ fontSize: "1.1rem", color: "#bdbdbd" }}>
+          <p className="mb-4" style={{ fontSize: "1.1rem", color: COLORS.muted }}>
             Construire des solutions web modernes, performantes et élégantes.
           </p>
           {/* Bloc Liens Sociaux */}
@@ -48,8 +56,8 @@ function SocialLinks() {
               target="_blank"
               rel="noreferrer"
               style={{
-                background: "#23234f",
-                color: "#0a66c2",
+                background: COLORS.card,
+                color: COLORS.accent,
                 borderRadius: "50%",
                 width: 48,
                 height: 48,
@@ -57,10 +65,9 @@ function SocialLinks() {
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 24,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
               }}
             >
-              {/* Correction: s'assurer que l'enfant de <a> est un élément JSX valide */}
               {safeNode(<FaLinkedinIn />)}
             </a>
             <a
@@ -68,8 +75,8 @@ function SocialLinks() {
               target="_blank"
               rel="noreferrer"
               style={{
-                background: "#23234f",
-                color: "#fff",
+                background: COLORS.card,
+                color: COLORS.white,
                 borderRadius: "50%",
                 width: 48,
                 height: 48,
@@ -77,17 +84,16 @@ function SocialLinks() {
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 24,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
               }}
             >
-              {/* Correction: s'assurer que l'enfant de <a> est un élément JSX valide */}
               {safeNode(<AiFillGithub />)}
             </a>
             <a
               href="mailto:email@example.com"
               style={{
-                background: "#23234f",
-                color: "#6c63ff",
+                background: COLORS.card,
+                color: COLORS.accent,
                 borderRadius: "50%",
                 width: 48,
                 height: 48,
@@ -95,10 +101,9 @@ function SocialLinks() {
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 24,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
               }}
             >
-              {/* Correction: s'assurer que l'enfant de <a> est un élément JSX valide */}
               {safeNode(<AiOutlineMail />)}
             </a>
           </div>
@@ -110,10 +115,10 @@ function SocialLinks() {
               target="_blank"
               className="d-flex align-items-center px-4 py-2 rounded-pill"
               style={{
-                background: "#6c63ff",
+                background: COLORS.accent,
                 border: "none",
                 fontWeight: 600,
-                fontSize: "1rem"
+                fontSize: "1rem",
               }}
             >
               <FaDownload className="me-2" />
@@ -125,10 +130,10 @@ function SocialLinks() {
               target="_blank"
               className="d-flex align-items-center px-4 py-2 rounded-pill"
               style={{
-                border: "2px solid #6c63ff",
-                color: "#6c63ff",
+                border: `2px solid ${COLORS.accent}`,
+                color: COLORS.accent,
                 fontWeight: 600,
-                fontSize: "1rem"
+                fontSize: "1rem",
               }}
             >
               <AiFillGithub className="me-2" />
