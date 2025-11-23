@@ -59,6 +59,11 @@ function VideoPlayer({ src, poster, isModal = false, controls = false, className
     }
   }, [shouldLoad, isModal, autoPlayPreview]);
 
+  // Determine whether the video should be muted for autoplay to be allowed by browsers.
+  // Autoplay with sound is commonly blocked, so when we intend to autoplay (e.g. in modal previews)
+  // we mute the video. For non-autoplay previews we keep behaviour as before.
+  const mutedForAutoplay = isModal || !controls;
+
   // If no video source provided, show poster image only
   if (!src) {
     return (
@@ -78,7 +83,7 @@ function VideoPlayer({ src, poster, isModal = false, controls = false, className
           controls={controls}
           preload={isModal ? "auto" : "metadata"}
           playsInline
-          muted={!controls}
+          muted={mutedForAutoplay}
           loop={!controls}
           autoPlay={isModal ? true : undefined}
           style={{ width: "100%", height: "auto", borderRadius: "12px", background: "#181824" }}
