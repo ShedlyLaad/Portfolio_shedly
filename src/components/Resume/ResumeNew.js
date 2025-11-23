@@ -4,7 +4,7 @@ import { AiFillGithub, AiOutlineMail } from "react-icons/ai";
 import { FaLinkedinIn, FaDownload } from "react-icons/fa";
 import Particle from "../Particle";
 import myImg from "../../Assets/me.png";
-import pdf from "../../Assets/../Assets/CV_Chedly_Laadhiby.pdf";
+import pdf from "../../Assets/CV-Chedly Laadhiby (2).pdf";
 
 // Correction: garantir que les enfants des balises <a> sont valides (évite le rendu d'objets bruts)
 const safeNode = (value) => {

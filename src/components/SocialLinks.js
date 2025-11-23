@@ -4,7 +4,7 @@ import { Row, Col, Button } from "react-bootstrap";
 import { AiFillGithub, AiOutlineMail } from "react-icons/ai";
 import { FaLinkedinIn, FaDownload } from "react-icons/fa";
 import myImg from "../Assets/me.png";
-import pdf from "../Assets/CV-Chedly Laadhiby.pdf";
+import pdf from "../Assets/CV-Chedly Laadhiby (2).pdf";
 
 const COLORS = {
   bgDark: "#181824",
