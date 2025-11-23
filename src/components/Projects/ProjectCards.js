@@ -4,9 +4,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { CgWebsite } from "react-icons/cg";
 import { BsGithub, BsLinkedin } from "react-icons/bs";
+import VideoPlayer from "./VideoPlayer";
 
 // Modal vidéo
-function DemoModal({ show, onHide, videoSrc }) {
+function DemoModal({ show, onHide, videoSrc, poster }) {
   const isValidVideo = typeof videoSrc === "string" && videoSrc.endsWith(".mp4");
 
   return (
@@ -22,17 +23,14 @@ function DemoModal({ show, onHide, videoSrc }) {
 
       <Modal.Body style={{ background: "#23234f", padding: 0 }}>
         {isValidVideo ? (
-          <video
-            controls
-            autoPlay
-            style={{
-              width: "100%",
-              borderRadius: "12px",
-              background: "#181824",
-            }}
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </video>
+          <div style={{ padding: "16px" }}>
+            <VideoPlayer
+              src={videoSrc}
+              poster={poster}
+              isModal={true}
+              controls={true}
+            />
+          </div>
         ) : (
           <p
             style={{
@@ -66,7 +64,12 @@ function ProjectCards(props) {
 
   return (
     <Card className="project-card-view">
-      <Card.Img variant="top" src={props.imgPath} alt={props.title || "project"} />
+      {/* If a demo video is provided show a lazy-loaded preview; otherwise show the static image */}
+      {props.demoVideo ? (
+        <VideoPlayer src={props.demoVideo} poster={props.imgPath} />
+      ) : (
+        <Card.Img variant="top" src={props.imgPath} alt={props.title || "project"} />
+      )}
       <Card.Body>
         <Card.Title>{safeText(props.title)}</Card.Title>
         <Card.Text style={{ textAlign: "justify" }}>
@@ -111,6 +114,7 @@ function ProjectCards(props) {
               show={showDemo}
               onHide={() => setShowDemo(false)}
               videoSrc={props.demoVideo}
+              poster={props.imgPath}
             />
           </>
         )}
