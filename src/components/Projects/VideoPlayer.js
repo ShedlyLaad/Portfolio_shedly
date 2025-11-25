@@ -11,7 +11,6 @@ function VideoPlayer({ src, poster, isModal = false, controls = false, className
   const wrapperRef = useRef(null);
   const videoRef = useRef(null);
   const [shouldLoad, setShouldLoad] = useState(Boolean(isModal));
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -51,8 +50,7 @@ function VideoPlayer({ src, poster, isModal = false, controls = false, className
     if (!shouldLoad || !videoRef.current) return;
 
     const v = videoRef.current;
-    // Reset loading/error state when (re)loading a source
-    setLoading(true);
+    // Reset error state when (re)loading a source
     setError(null);
 
     // For preview (non-modal) attempt muted autoplay/loop
@@ -66,7 +64,6 @@ function VideoPlayer({ src, poster, isModal = false, controls = false, className
 
     // When the video is ready to play, clear loading and try play if autoplay intended
     const handleCanPlay = () => {
-      setLoading(false);
       if (isModal) {
         // ensure muted for autoplay policy
         v.muted = true;
@@ -75,10 +72,7 @@ function VideoPlayer({ src, poster, isModal = false, controls = false, className
       }
     };
 
-    const handleError = () => {
-      setLoading(false);
-      setError('Erreur de chargement de la vidéo');
-    };
+    const handleError = () => setError("Erreur de chargement de la vidéo");
 
     v.addEventListener("canplay", handleCanPlay);
     v.addEventListener("loadeddata", handleCanPlay);
@@ -126,24 +120,11 @@ function VideoPlayer({ src, poster, isModal = false, controls = false, className
         <img src={poster} alt="project" style={{ width: "100%", display: "block" }} />
       )}
 
-      {/* Loading overlay / error message */}
-      {shouldLoad && loading && (
-        <div style={{ position: "relative", marginTop: - (style && style.height ? parseInt(style.height,10) || 0 : 0) }}>
-          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: 64, height: 64, borderRadius: 8, background: "rgba(0,0,0,0.6)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ width: 28, height: 28, border: "4px solid #fff", borderTopColor: "transparent", borderRadius: "50%", animation: "vp-spin 1s linear infinite" }} />
-            </div>
-          </div>
-        </div>
-      )}
-
       {error && (
         <div style={{ padding: 12, color: "#fff", background: "#b00020", borderRadius: 8, marginTop: 8 }}>
           {error}. <a href={src} target="_blank" rel="noreferrer" style={{ color: "#fff", textDecoration: "underline" }}>Ouvrir la vidéo</a>
         </div>
       )}
-
-      <style>{`@keyframes vp-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
 
       {/* Fallback link in case the browser can't play the video */}
       <div style={{ display: shouldLoad ? "none" : "block" }}>
