@@ -90,7 +90,7 @@ function SocialLinks() {
               {safeNode(<AiFillGithub />)}
             </a>
             <a
-              href="mailto:email@example.com"
+              href="mailto:shedlylaaddhiby@gmail.com"
               style={{
                 background: COLORS.card,
                 color: COLORS.accent,
@@ -105,6 +105,11 @@ function SocialLinks() {
               }}
             >
               {safeNode(<AiOutlineMail />)}
+            </a>
+          </div>
+          {/* Adresse e-mail visible */}
+          <div style={{ marginTop: 8 }}>
+            <a href="mailto:shedlylaaddhiby@gmail.com" style={{ color: COLORS.accent, textDecoration: "underline" }}>
             </a>
           </div>
           {/* Bloc Appel à l'action */}
