@@ -1,96 +1,36 @@
 # Portfolio - Chedly Laadhiby
 
-Portfolio professionnel moderne et futuriste développé avec React + Vite, TypeScript, et Tailwind CSS.
+![Portfolio Preview](./public/Readme.png)
 
-## 🚀 Technologies
+Bienvenue sur mon portfolio professionnel. Je suis Chedly Laadhiby, développeur Full Stack passionné par la création de solutions web modernes, performantes et élégantes.
 
-- **React 19** + **TypeScript**
-- **Vite** - Build tool ultra-rapide
-- **Tailwind CSS** - Framework CSS utility-first
-- **Framer Motion** - Animations fluides
-- **Three.js** - Animations 3D (DottedSurface)
-- **React Icons** & **Lucide React** - Icônes
+## À propos
 
-## 📦 Installation
+Ce portfolio présente mon parcours professionnel, mes compétences, mes projets et mon expérience dans le développement web. Il a été conçu pour offrir une expérience utilisateur fluide et immersive, disponible en français et en anglais.
 
-```bash
-npm install
-```
+## Sections
 
-## 🛠️ Développement
+- **Accueil** - Présentation et introduction
+- **À propos** - Mon parcours et ma vision
+- **Compétences** - Technologies et outils que je maîtrise
+- **Formation** - Mon parcours éducatif
+- **Expérience** - Mes expériences professionnelles
+- **Projets** - Réalisations et travaux
+- **Contact** - Me contacter et réseaux sociaux
 
-```bash
-npm run dev
-```
+## Caractéristiques
 
-## 🏗️ Build pour production
+- Design moderne et futuriste avec animations fluides
+- Interface entièrement responsive pour tous les appareils
+- Support multilingue (Français/Anglais)
+- Thème sombre avec effets de glassmorphism
+- Performance optimisée
 
-```bash
-npm run build
-```
+## Contact
 
-Le build sera généré dans le dossier `dist/`.
+Pour toute question ou collaboration, vous pouvez me contacter via les liens disponibles dans la section Contact du portfolio.
 
-## 📝 Scripts disponibles
-
-- `npm run dev` - Lance le serveur de développement
-- `npm run build` - Build de production optimisé
-- `npm run preview` - Prévisualise le build de production
-- `npm run lint` - Vérifie le code avec ESLint
-
-## 🌐 Déploiement sur Vercel
-
-Le projet est configuré pour être déployé automatiquement sur Vercel.
-
-### Déploiement automatique via GitHub
-
-1. Poussez votre code sur GitHub
-2. Allez sur [vercel.com](https://vercel.com)
-3. Importez votre repository GitHub
-4. Vercel détectera automatiquement les paramètres (Vite)
-5. Cliquez sur "Deploy"
-
-### Déploiement manuel avec Vercel CLI
-
-```bash
-npm install -g vercel
-vercel
-```
-
-## 📄 Structure du projet
-
-```
-portfolio_glx/
-├── src/
-│   ├── assets/          # Images, logos, CV, etc.
-│   ├── components/      # Composants React
-│   │   ├── ui/         # Composants UI réutilisables
-│   ├── contexts/        # Contextes React (Theme)
-│   ├── data/           # Données du portfolio (data.js)
-│   ├── lib/            # Utilitaires
-│   ├── styles/         # Styles globaux
-│   └── App.tsx         # Composant principal
-├── index.html          # Point d'entrée HTML
-├── vercel.json        # Configuration Vercel
-└── vite.config.ts     # Configuration Vite
-```
-
-## 🎨 Caractéristiques
-
-- ✨ Design futuriste avec animations fluides
-- 📱 Entièrement responsive (desktop, tablette, mobile)
-- 🌐 Support multi-langue (Français/Anglais)
-- 🎭 Thème sombre avec glassmorphism
-- ⚡ Performance optimisée
-- 🔒 Protection copyright
-- 📊 Animations 3D avec Three.js
-
-## 📧 Contact
-
-**Chedly Laadhiby**
-- Email: Voir dans la section Contact du portfolio
-- LinkedIn: Voir dans la section Contact du portfolio
-- GitHub: [ShedlyLaad](https://github.com/ShedlyLaad)
+GitHub: [ShedlyLaad](https://github.com/ShedlyLaad)
 
 ---
 
