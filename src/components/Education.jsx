@@ -21,13 +21,13 @@ export default function Education({ language = "en" }) {
         </motion.div>
 
         <div className="relative">
-          {/* Elegant vertical timeline */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-400 via-cyan-400 to-emerald-400 transform md:-translate-x-1/2 rounded-full"
+          {/* Elegant vertical timeline - hidden on mobile */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-400 via-cyan-400 to-emerald-400 transform -translate-x-1/2 rounded-full"
             style={{
               boxShadow: '0 0 15px rgba(20, 184, 166, 0.4)',
             }}
           />
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-teal-500/50 via-cyan-500/50 to-emerald-500/50 transform md:-translate-x-1/2" />
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-teal-500/50 via-cyan-500/50 to-emerald-500/50 transform -translate-x-1/2" />
 
           <div className="space-y-14">
             {education.map((edu, index) => (
@@ -42,7 +42,7 @@ export default function Education({ language = "en" }) {
                 }`}
               >
                 {/* Elegant timeline node */}
-                <div className="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 z-20">
+                <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 z-20">
                   <motion.div
                     initial={{ scale: 0, rotate: -180 }}
                     whileInView={{ scale: 1, rotate: 0 }}
@@ -67,19 +67,19 @@ export default function Education({ language = "en" }) {
                     />
                     
                     {/* Icon container with elegant design */}
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-teal-500/30 to-emerald-500/30 backdrop-blur-xl border-2 border-teal-400/60 flex items-center justify-center shadow-xl"
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-teal-500/30 to-emerald-500/30 backdrop-blur-xl border-2 border-teal-400/60 flex items-center justify-center shadow-xl"
                       style={{
                         boxShadow: '0 0 25px rgba(20, 184, 166, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.2)',
                       }}
                     >
-                      <GraduationCap className="w-6 h-6 text-teal-300" />
+                      <GraduationCap className="w-5 h-5 md:w-6 md:h-6 text-teal-300" />
                     </div>
                   </motion.div>
                 </div>
 
                 {/* Content card with academic style */}
                 <div
-                  className={`ml-20 md:ml-0 md:w-[48%] ${
+                  className={`ml-12 md:ml-0 md:w-[48%] ${
                     index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
                   }`}
                 >
@@ -89,7 +89,7 @@ export default function Education({ language = "en" }) {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.2 + 0.1 }}
                     whileHover={{ y: -6, scale: 1.01 }}
-                    className="glass-card rounded-2xl p-6 md:p-7 relative overflow-hidden group"
+                    className="glass-card rounded-2xl p-5 md:p-7 relative overflow-hidden group w-full"
                   >
                     {/* Top accent border */}
                     <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-400 via-cyan-400 to-emerald-400 rounded-t-2xl" />
@@ -151,7 +151,7 @@ export default function Education({ language = "en" }) {
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.4, delay: descIndex * 0.1 }}
-                          className="flex items-start gap-3 text-gray-300 text-sm leading-relaxed group/item"
+                          className="flex items-start gap-2 md:gap-3 text-gray-300 text-sm md:text-base leading-relaxed group/item"
                         >
                           <motion.span 
                             className="text-teal-400 mt-1 flex-shrink-0 text-lg"

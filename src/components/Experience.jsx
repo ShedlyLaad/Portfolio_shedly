@@ -21,9 +21,9 @@ export default function Experience({ language = "en" }) {
         </motion.div>
 
         <div className="relative">
-          {/* Modern vertical timeline with gradient */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-teal-400 to-emerald-400 transform md:-translate-x-1/2 rounded-full opacity-30" />
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 via-teal-500 to-emerald-500 transform md:-translate-x-1/2 rounded-full" 
+          {/* Modern vertical timeline with gradient - hidden on mobile */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-teal-400 to-emerald-400 transform -translate-x-1/2 rounded-full opacity-30" />
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 via-teal-500 to-emerald-500 transform -translate-x-1/2 rounded-full" 
             style={{
               boxShadow: '0 0 20px rgba(0, 240, 255, 0.5)',
             }}
@@ -42,7 +42,7 @@ export default function Experience({ language = "en" }) {
                 }`}
               >
                 {/* Enhanced timeline node */}
-                <div className="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 z-20">
+                <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 z-20">
                   <motion.div
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
@@ -68,19 +68,19 @@ export default function Experience({ language = "en" }) {
                     />
                     
                     {/* Icon container */}
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 backdrop-blur-lg border-2 border-cyan-400/50 flex items-center justify-center shadow-lg"
+                    <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 backdrop-blur-lg border-2 border-cyan-400/50 flex items-center justify-center shadow-lg"
                       style={{
                         boxShadow: '0 0 30px rgba(0, 240, 255, 0.5), inset 0 0 20px rgba(16, 185, 129, 0.2)',
                       }}
                     >
-                      <Briefcase className="w-7 h-7 text-cyan-400" />
+                      <Briefcase className="w-4 h-4 md:w-7 md:h-7 text-cyan-400" />
                     </div>
                   </motion.div>
                 </div>
 
                 {/* Content card with modern design */}
                 <div
-                  className={`ml-24 md:ml-0 md:w-[48%] ${
+                  className={`ml-12 md:ml-0 md:w-[48%] ${
                     index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
                   }`}
                 >
@@ -90,7 +90,7 @@ export default function Experience({ language = "en" }) {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.2 + 0.1 }}
                     whileHover={{ y: -8, scale: 1.01 }}
-                    className="glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden group"
+                    className="glass-card rounded-2xl p-5 md:p-8 relative overflow-hidden group w-full"
                   >
                     {/* Gradient accent line */}
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-teal-400 to-emerald-400 rounded-l-2xl" />
@@ -111,22 +111,22 @@ export default function Experience({ language = "en" }) {
                     />
                     
                     {/* Company header */}
-                    <div className="mb-6">
+                    <div className="mb-5 md:mb-6">
                       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-4">
                         <div className="flex-1">
-                          <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
+                          <h3 className="text-xl md:text-3xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
                             {exp.company || exp.entreprise}
                           </h3>
-                          <div className="flex flex-wrap items-center gap-3">
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30">
-                              <MapPin className="w-4 h-4 text-cyan-400" />
-                              <span className="text-sm font-medium text-cyan-300">
+                          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+                            <div className="flex items-center gap-2 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30">
+                              <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-cyan-400" />
+                              <span className="text-xs md:text-sm font-medium text-cyan-300">
                                 {exp.location || exp.localisation}
                               </span>
                             </div>
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-400/30">
-                              <Calendar className="w-4 h-4 text-teal-400" />
-                              <span className="text-sm font-medium text-teal-300">
+                            <div className="flex items-center gap-2 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full bg-teal-500/10 border border-teal-400/30">
+                              <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 text-teal-400" />
+                              <span className="text-xs md:text-sm font-medium text-teal-300">
                                 {exp.period || exp.periode}
                               </span>
                             </div>
@@ -135,9 +135,9 @@ export default function Experience({ language = "en" }) {
                       </div>
 
                       {/* Position badge */}
-                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 border border-cyan-400/30 backdrop-blur-sm">
-                        <ArrowRight className="w-4 h-4 text-cyan-400" />
-                        <span className="text-sm font-semibold text-white">
+                      <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 border border-cyan-400/30 backdrop-blur-sm">
+                        <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-cyan-400" />
+                        <span className="text-xs md:text-sm font-semibold text-white">
                           {exp.position || exp.poste}
                         </span>
                       </div>
@@ -157,7 +157,7 @@ export default function Experience({ language = "en" }) {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.4, delay: missionIndex * 0.1 }}
-                            className="flex items-start gap-3 text-gray-300 text-sm leading-relaxed group/item"
+                            className="flex items-start gap-2 md:gap-3 text-gray-300 text-sm md:text-base leading-relaxed group/item"
                           >
                             <motion.span 
                               className="text-cyan-400 mt-1.5 flex-shrink-0 text-lg"

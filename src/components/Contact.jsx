@@ -200,31 +200,6 @@ export default function Contact({ language = "en" }) {
           </div>
         </motion.div>
       </div>
-
-      <style jsx>{`
-        @keyframes shake {
-          0%, 100% { 
-            transform: translateX(0) rotate(0); 
-          }
-          20% { 
-            transform: translateX(-3px) rotate(-3deg); 
-          }
-          40% { 
-            transform: translateX(3px) rotate(3deg); 
-          }
-          60% { 
-            transform: translateX(-3px) rotate(-3deg); 
-          }
-          80% { 
-            transform: translateX(3px) rotate(3deg); 
-          }
-        }
-        
-        .social-icon:hover .icon-container svg,
-        .social-icon:hover .icon-container {
-          animation: shake 0.5s ease-in-out;
-        }
-      `}</style>
     </section>
   )
 }
