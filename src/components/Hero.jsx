@@ -1,4 +1,4 @@
-import { ArrowDown, Download } from "lucide-react"
+import { Download, ArrowDown } from "lucide-react"
 import { data } from "../data/data"
 import moiImage from "../assets/Moi.png"
 import cvFile from "../assets/Chedly Laadhiby CV (Fr)..pdf"
@@ -19,7 +19,6 @@ export default function Hero({ language = "en" }) {
   const outerCircleRef = useRef(null)
   const middleCircleRef = useRef(null)
   const innerCircleRef = useRef(null)
-  const scrollIndicatorRef = useRef(null)
 
   useEffect(() => {
     setMounted(true)
@@ -121,16 +120,6 @@ export default function Hero({ language = "en" }) {
           }
         }, 50)
       }
-      // Scroll indicator
-      if (scrollIndicatorRef.current) {
-        scrollIndicatorRef.current.style.opacity = '0'
-        setTimeout(() => {
-          if (scrollIndicatorRef.current) {
-            scrollIndicatorRef.current.style.transition = 'opacity 0.8s ease-out 1.2s'
-            scrollIndicatorRef.current.style.opacity = '1'
-          }
-        }, 50)
-      }
     }
     animateElements()
   }, [])
@@ -204,24 +193,23 @@ export default function Hero({ language = "en" }) {
             >
               <button
                 onClick={handleScroll}
-                className="group relative px-8 py-4 bg-primary/20 hover:bg-primary/30 border border-primary/50 rounded-full text-white font-semibold"
+                className="group relative w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border-2 border-cyan-400/50 hover:border-cyan-400 text-white font-semibold flex items-center justify-center"
                 style={{
                   willChange: 'transform',
-                  transition: 'transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                  transition: 'transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+                  boxShadow: '0 0 20px rgba(0, 240, 255, 0.3)'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05)'
-                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 102, 255, 0.5)'
+                  e.currentTarget.style.transform = 'scale(1.1)'
+                  e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 240, 255, 0.5)'
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)'
-                  e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.3)'
                 }}
+                aria-label={language === "en" ? "View Projects" : "Voir Projets"}
               >
-                <span className="flex items-center justify-center gap-2">
-                  {language === "en" ? "View Projects" : "Voir Projets"}
-                  <ArrowDown className="w-5 h-5 transition-transform duration-300 group-hover:translate-y-1" />
-                </span>
+                <ArrowDown className="w-6 h-6 text-cyan-400 transition-transform duration-300 group-hover:translate-y-1" />
               </button>
 
               <button
@@ -329,24 +317,6 @@ export default function Hero({ language = "en" }) {
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div
-          ref={scrollIndicatorRef}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-          style={{ willChange: 'opacity' }}
-        >
-          <div
-            className="cursor-pointer"
-            onClick={handleScroll}
-            style={{
-              willChange: 'transform',
-              animation: 'bounce-arrow 2s ease-in-out infinite'
-            }}
-          >
-            <ArrowDown className="w-6 h-6 text-white/50 hover:text-white transition-colors" />
-          </div>
-        </div>
       </div>
 
       {/* Background gradient effect */}
@@ -380,10 +350,6 @@ export default function Hero({ language = "en" }) {
         @keyframes float-particle {
           0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.4; }
           50% { transform: translate3d(0, -20px, 0); opacity: 1; }
-        }
-        @keyframes bounce-arrow {
-          0%, 100% { transform: translate3d(0, 0, 0); }
-          50% { transform: translate3d(0, 10px, 0); }
         }
         @media (max-width: 768px) {
           @keyframes rotate-circle,

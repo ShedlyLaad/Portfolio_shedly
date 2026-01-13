@@ -1,6 +1,7 @@
 import { useInView } from "../hooks/useInView"
-import { Mail, Github, Linkedin, Instagram, Phone } from "lucide-react"
+import { Mail, Github, Linkedin, Instagram, Phone, ArrowUp } from "lucide-react"
 import { data } from "../data/data"
+import { useState, useEffect } from "react"
 
 export default function Contact({ language = "en" }) {
   const personal = data.personal[language]
@@ -54,6 +55,20 @@ export default function Contact({ language = "en" }) {
 
   const { ref: headerRef, isInView: headerInView } = useInView({ threshold: 0.1, triggerOnce: true })
   const { ref: containerRef, isInView: containerInView } = useInView({ threshold: 0.1, triggerOnce: true })
+  
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <section id="contact" className="py-24 px-4 relative">
@@ -222,7 +237,41 @@ export default function Contact({ language = "en" }) {
           </div>
         </div>
       </div>
+
+      {/* Scroll to top button - Green/Cyan design */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border-2 border-cyan-400/50 hover:border-cyan-400 text-white z-50 flex items-center justify-center group shadow-lg"
+          style={{
+            willChange: 'transform, box-shadow',
+            transition: 'transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease',
+            boxShadow: '0 0 20px rgba(0, 240, 255, 0.3)',
+            animation: 'pulse-glow-contact 2s ease-in-out infinite'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px) scale(1.1)'
+            e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 240, 255, 0.5)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0) scale(1)'
+            e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.3)'
+          }}
+          aria-label={language === "en" ? "Scroll to top" : "Retour en haut"}
+        >
+          <ArrowUp className="w-6 h-6 text-cyan-400 transition-transform duration-300 group-hover:-translate-y-1" />
+        </button>
+      )}
+
       <style>{`
+        @keyframes pulse-glow-contact {
+          0%, 100% { 
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+          }
+          50% { 
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+          }
+        }
         @media (max-width: 768px) {
           .social-icon:hover {
             transform: none !important;
