@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { useInView } from "../hooks/useInView"
 import { data } from "../data/data"
 import {
   DiJavascript1,
@@ -104,30 +104,40 @@ export default function Skills({ language = "en" }) {
     }
   ]
 
+  const { ref: sectionRef, isInView: sectionInView } = useInView({ threshold: 0.1, triggerOnce: true })
+
   return (
     <section id="skills" className="py-24 px-4 relative">
       <div className="container mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
+          ref={sectionRef}
           className="text-center mb-16"
+          style={{
+            opacity: sectionInView ? 1 : 0,
+            transform: sectionInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+          }}
         >
           <h2 className="text-4xl md:text-5xl section-title mb-8">
             {language === "en" ? "Skills" : "Compétences"}
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {skillCategories.map((category, categoryIndex) => (
-            <motion.div
+          {skillCategories.map((category, categoryIndex) => {
+            const { ref: categoryRef, isInView: categoryInView } = useInView({ threshold: 0.1, triggerOnce: true })
+            return (
+            <div
               key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: categoryIndex * 0.2 }}
+              ref={categoryRef}
               className="glass-card rounded-2xl p-6 md:p-8"
+              style={{
+                opacity: categoryInView ? 1 : 0,
+                transform: categoryInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 30px, 0)',
+                willChange: 'transform, opacity',
+                transition: `opacity 0.8s ease-out ${categoryIndex * 0.2}s, transform 0.8s ease-out ${categoryIndex * 0.2}s`
+              }}
             >
               {/* Category header */}
               <div className="mb-8 text-center">
@@ -141,22 +151,28 @@ export default function Skills({ language = "en" }) {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
                 {category.skills.map((skill, index) => {
                   const IconComponent = category.getIcon(skill)
+                  const { ref: skillRef, isInView: skillInView } = useInView({ threshold: 0.1, triggerOnce: true })
                   return (
-                    <motion.div
+                    <div
                       key={skill}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ 
-                        duration: 0.4, 
-                        delay: index * 0.03,
-                        ease: "easeOut"
-                      }}
-                      whileHover={{ 
-                        scale: 1.05, 
-                        y: -4,
-                      }}
+                      ref={skillRef}
                       className="group flex flex-col items-center gap-3 cursor-pointer"
+                      style={{
+                        opacity: skillInView ? 1 : 0,
+                        transform: skillInView ? 'scale(1)' : 'scale(0.8)',
+                        willChange: 'transform, opacity',
+                        transition: `opacity 0.4s ease-out ${index * 0.03}s, transform 0.4s ease-out ${index * 0.03}s`
+                      }}
+                      onMouseEnter={(e) => {
+                        if (window.innerWidth > 768) {
+                          e.currentTarget.style.transform = 'scale(1.05) translate3d(0, -4px, 0)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (window.innerWidth > 768) {
+                          e.currentTarget.style.transform = 'scale(1) translate3d(0, 0, 0)'
+                        }
+                      }}
                     >
                       {/* Icon container - clean and simple, no constant animations */}
                       <div 
@@ -191,12 +207,13 @@ export default function Skills({ language = "en" }) {
                       >
                         {skill}
                       </span>
-                    </motion.div>
+                    </div>
                   )
                 })}
               </div>
-            </motion.div>
-          ))}
+            </div>
+            )
+          })}
         </div>
       </div>
     </section>

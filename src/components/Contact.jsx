@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { useInView } from "../hooks/useInView"
 import { Mail, Github, Linkedin, Instagram, Phone } from "lucide-react"
 import { data } from "../data/data"
 
@@ -52,16 +52,22 @@ export default function Contact({ language = "en" }) {
     }
   ]
 
+  const { ref: headerRef, isInView: headerInView } = useInView({ threshold: 0.1, triggerOnce: true })
+  const { ref: containerRef, isInView: containerInView } = useInView({ threshold: 0.1, triggerOnce: true })
+
   return (
     <section id="contact" className="py-24 px-4 relative">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
+          ref={headerRef}
           className="text-center mb-16"
+          style={{
+            opacity: headerInView ? 1 : 0,
+            transform: headerInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+          }}
         >
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span className="section-title">
@@ -76,15 +82,18 @@ export default function Contact({ language = "en" }) {
               ? "Let's work together or just have a chat"
               : "Travaillons ensemble ou discutons simplement"}
           </p>
-        </motion.div>
+        </div>
 
         {/* 3D Glowing Container */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+        <div
+          ref={containerRef}
           className="relative"
+          style={{
+            opacity: containerInView ? 1 : 0,
+            transform: containerInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 30px, 0)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s'
+          }}
         >
           <div 
             className="rounded-3xl bg-gradient-to-br from-gray-800/80 to-gray-900/90 border border-white/10 shadow-2xl backdrop-blur-3xl overflow-hidden p-8 md:p-12 transition-all duration-500 hover:scale-[1.02]"
@@ -105,18 +114,31 @@ export default function Contact({ language = "en" }) {
             <div className="flex flex-wrap justify-center gap-6 md:gap-8">
               {socialLinks.map((link, index) => {
                 const Icon = link.icon
+                const { ref: linkRef, isInView: linkInView } = useInView({ threshold: 0.1, triggerOnce: true })
                 return (
-                  <motion.a
+                  <a
                     key={link.name}
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{ y: -10, scale: 1.1 }}
+                    ref={linkRef}
                     className="social-icon group flex flex-col items-center text-decoration-none transition-all duration-300 relative z-10"
+                    style={{
+                      opacity: linkInView ? 1 : 0,
+                      transform: linkInView ? 'scale(1)' : 'scale(0.8)',
+                      willChange: 'transform, opacity',
+                      transition: `opacity 0.5s ease-out ${index * 0.1}s, transform 0.5s ease-out ${index * 0.1}s`
+                    }}
+                    onMouseEnter={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, -10px, 0) scale(1.1)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, 0, 0) scale(1)'
+                      }
+                    }}
                   >
                     {/* Icon Container */}
                     <div 
@@ -168,7 +190,7 @@ export default function Contact({ language = "en" }) {
                     >
                       {link.name}
                     </span>
-                  </motion.a>
+                  </a>
                 )
               })}
             </div>
@@ -195,11 +217,18 @@ export default function Contact({ language = "en" }) {
               >
                 <Mail className="w-5 h-5" />
                 <span>{contact.email}</span>
-              </motion.a>
+              </a>
             </div> */}
           </div>
-        </motion.div>
+        </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .social-icon:hover {
+            transform: none !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

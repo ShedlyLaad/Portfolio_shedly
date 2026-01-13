@@ -1,6 +1,5 @@
-import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 interface VideoModalProps {
   isOpen: boolean
@@ -10,14 +9,30 @@ interface VideoModalProps {
 }
 
 export function VideoModal({ isOpen, onClose, videoSrc, title }: VideoModalProps) {
+  const [isVisible, setIsVisible] = useState(false)
+  const [shouldRender, setShouldRender] = useState(false)
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
+      setShouldRender(true)
+      // Trigger animation after render
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true)
+        })
+      })
     } else {
-      document.body.style.overflow = "unset"
-    }
-    return () => {
-      document.body.style.overflow = "unset"
+      setIsVisible(false)
+      // Wait for exit animation before unmounting
+      const timer = setTimeout(() => {
+        setShouldRender(false)
+        document.body.style.overflow = "unset"
+      }, 300)
+      return () => {
+        clearTimeout(timer)
+        document.body.style.overflow = "unset"
+      }
     }
   }, [isOpen])
 
@@ -31,28 +46,31 @@ export function VideoModal({ isOpen, onClose, videoSrc, title }: VideoModalProps
     return () => window.removeEventListener("keydown", handleEscape)
   }, [isOpen, onClose])
 
+  if (!shouldRender || !videoSrc) return null
+
   return (
-    <AnimatePresence>
-      {isOpen && videoSrc && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[10000] flex items-center justify-center p-4"
-          >
-            {/* Modal Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.3 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-6xl bg-background/95 backdrop-blur-lg rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
-            >
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[10000] flex items-center justify-center p-4"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          willChange: 'opacity',
+          transition: 'opacity 0.3s ease-out'
+        }}
+      >
+        {/* Modal Content */}
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-6xl bg-background/95 backdrop-blur-lg rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+          style={{
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 20px, 0) scale(0.9)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.3s ease-out, transform 0.3s ease-out'
+          }}
+        >
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-white/10">
                 {title && (
@@ -79,10 +97,8 @@ export function VideoModal({ isOpen, onClose, videoSrc, title }: VideoModalProps
                   Your browser does not support the video tag.
                 </video>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </>
-      )}
-    </AnimatePresence>
-  )
+      )
 }

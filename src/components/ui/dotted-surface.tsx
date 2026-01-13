@@ -1,14 +1,15 @@
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/contexts/ThemeContext'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 
 type DottedSurfaceProps = Omit<React.ComponentProps<'div'>, 'ref'>
 
 export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
   const { theme } = useTheme()
+  const [isMobile, setIsMobile] = useState(false)
 
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const sceneRef = useRef<{
     scene: THREE.Scene
     camera: THREE.PerspectiveCamera
@@ -19,13 +20,23 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
   } | null>(null)
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
     if (!containerRef.current) return
     
     const container = containerRef.current
 
-    const SEPARATION = 150
-    const AMOUNTX = 40
-    const AMOUNTY = 60
+    // Optimized particles for both mobile and web performance
+    const SEPARATION = isMobile ? 200 : 180
+    const AMOUNTX = isMobile ? 20 : 30
+    const AMOUNTY = isMobile ? 30 : 45
 
     // Scene setup
     const scene = new THREE.Scene()
@@ -42,9 +53,11 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: true,
+      antialias: !isMobile, // Enable antialiasing on web for smooth appearance
+      powerPreference: 'high-performance',
     })
-    renderer.setPixelRatio(window.devicePixelRatio)
+    // Limit pixel ratio for performance but keep smooth appearance
+    renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2.5))
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setClearColor(scene.fog.color, 0)
 
@@ -79,12 +92,12 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     )
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
 
-    // Create material - enhanced visibility
+    // Create material - original smooth appearance with performance optimization
     const material = new THREE.PointsMaterial({
-      size: 8, // Optimized size
+      size: isMobile ? 6 : 8, // Original size for smooth appearance
       vertexColors: true,
       transparent: true,
-      opacity: 0.8, // Slightly transparent for depth
+      opacity: isMobile ? 0.6 : 0.8, // Original opacity for smooth glow
       sizeAttenuation: true,
       blending: THREE.AdditiveBlending, // Additive blending for glow effect
     })
@@ -96,22 +109,35 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     let count = 0
     let animationId = 0
 
-    // Animation function
-    const animate = () => {
+    // Animation function - optimized for performance on all devices
+    let lastFrameTime = 0
+    const targetFPS = 60 // Target 60 FPS for smooth animation
+    const frameInterval = 1000 / targetFPS
+
+    const animate = (currentTime: number) => {
       animationId = requestAnimationFrame(animate)
+
+      // Throttle animation for consistent performance
+      if (currentTime - lastFrameTime < frameInterval) {
+        return
+      }
+      lastFrameTime = currentTime
 
       const positionAttribute = geometry.attributes.position
       const positions = positionAttribute.array as Float32Array
 
       let i = 0
+      const speed = isMobile ? 0.05 : 0.1 // Original smooth speed
+      const amplitude = isMobile ? 30 : 50 // Original smooth amplitude
+      
       for (let ix = 0; ix < AMOUNTX; ix++) {
         for (let iy = 0; iy < AMOUNTY; iy++) {
           const index = i * 3
 
           // Animate Y position with sine waves
           positions[index + 1] =
-            Math.sin((ix + count) * 0.3) * 50 +
-            Math.sin((iy + count) * 0.5) * 50
+            Math.sin((ix + count) * 0.3) * amplitude +
+            Math.sin((iy + count) * 0.5) * amplitude
 
           i++
         }
@@ -120,7 +146,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
       positionAttribute.needsUpdate = true
 
       renderer.render(scene, camera)
-      count += 0.1
+      count += speed
     }
 
     // Handle window resize
@@ -133,7 +159,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     window.addEventListener('resize', handleResize)
 
     // Start animation
-    animate()
+    animate(0)
 
     // Store references
     sceneRef.current = {
@@ -171,7 +197,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
         }
       }
     }
-  }, [theme])
+  }, [theme, isMobile])
 
   return (
     <div

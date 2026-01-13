@@ -1,24 +1,29 @@
-import { motion } from "framer-motion"
+import { useInView } from "../hooks/useInView"
 import { Briefcase, MapPin, Calendar, ArrowRight } from "lucide-react"
 import { data } from "../data/data"
 
 export default function Experience({ language = "en" }) {
   const experiences = data.experience[language]
 
+  const { ref: sectionRef, isInView: sectionInView } = useInView({ threshold: 0.1, triggerOnce: true })
+
   return (
     <section id="experience" className="py-24 px-4 relative overflow-hidden">
       <div className="container mx-auto max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
+          ref={sectionRef}
           className="text-center mb-16"
+          style={{
+            opacity: sectionInView ? 1 : 0,
+            transform: sectionInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+          }}
         >
           <h2 className="text-4xl md:text-5xl section-title mb-8">
             {language === "en" ? "Experience" : "Expérience"}
           </h2>
-        </motion.div>
+        </div>
 
         <div className="relative">
           {/* Modern vertical timeline with gradient - hidden on mobile */}
@@ -30,41 +35,51 @@ export default function Experience({ language = "en" }) {
           />
 
           <div className="space-y-16">
-            {experiences.map((exp, index) => (
-              <motion.div
+            {experiences.map((exp, index) => {
+              const { ref: expRef, isInView: expInView } = useInView({ threshold: 0.1, triggerOnce: true })
+              return (
+              <div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -80 : 80 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: "easeOut" }}
+                ref={expRef}
                 className={`relative flex items-start ${
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
+                style={{
+                  opacity: expInView ? 1 : 0,
+                  transform: expInView ? 'translate3d(0, 0, 0)' : `translate3d(${index % 2 === 0 ? -80 : 80}px, 0, 0)`,
+                  willChange: 'transform, opacity',
+                  transition: `opacity 0.8s ease-out ${index * 0.2}s, transform 0.8s ease-out ${index * 0.2}s`
+                }}
               >
                 {/* Enhanced timeline node */}
                 <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 z-20">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.2 + 0.3, type: "spring" }}
-                    whileHover={{ scale: 1.2, rotate: 360 }}
-                    transition={{ duration: 0.6 }}
+                  <div
                     className="relative"
+                    style={{
+                      opacity: expInView ? 1 : 0,
+                      transform: expInView ? 'scale(1)' : 'scale(0)',
+                      willChange: 'transform, opacity',
+                      transition: `opacity 0.5s ease-out ${index * 0.2 + 0.3}s, transform 0.5s ease-out ${index * 0.2 + 0.3}s`
+                    }}
+                    onMouseEnter={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'scale(1.2) rotate(360deg)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'scale(1) rotate(0deg)'
+                      }
+                    }}
                   >
                     {/* Outer glow */}
-                    <motion.div
-                      animate={{
-                        opacity: [0.5, 1, 0.5],
-                        scale: [1, 1.2, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.3
-                      }}
+                    <div
                       className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 blur-lg -z-10"
+                      style={{
+                        willChange: 'opacity, transform',
+                        animation: `pulse-glow-exp 2s ease-in-out infinite`,
+                        animationDelay: `${index * 0.3}s`
+                      }}
                     />
                     
                     {/* Icon container */}
@@ -75,7 +90,7 @@ export default function Experience({ language = "en" }) {
                     >
                       <Briefcase className="w-4 h-4 md:w-7 md:h-7 text-cyan-400" />
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
 
                 {/* Content card with modern design */}
@@ -84,29 +99,35 @@ export default function Experience({ language = "en" }) {
                     index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
                   }`}
                 >
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.1 }}
-                    whileHover={{ y: -8, scale: 1.01 }}
+                  <div
                     className="glass-card rounded-2xl p-5 md:p-8 relative overflow-hidden group w-full"
+                    style={{
+                      opacity: expInView ? 1 : 0,
+                      transform: expInView ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 20px, 0) scale(1)',
+                      willChange: 'transform, opacity',
+                      transition: `opacity 0.6s ease-out ${index * 0.2 + 0.1}s, transform 0.6s ease-out ${index * 0.2 + 0.1}s`
+                    }}
+                    onMouseEnter={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, -8px, 0) scale(1.01)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, 0, 0) scale(1)'
+                      }
+                    }}
                   >
                     {/* Gradient accent line */}
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-teal-400 to-emerald-400 rounded-l-2xl" />
                     
                     {/* Animated gradient overlay */}
-                    <motion.div
+                    <div
                       className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-cyan-500/10 via-teal-500/5 to-transparent rounded-full blur-3xl -z-10"
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.5, 0.3],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.5
+                      style={{
+                        willChange: 'transform, opacity',
+                        animation: `pulse-overlay-exp 4s ease-in-out infinite`,
+                        animationDelay: `${index * 0.5}s`
                       }}
                     />
                     
@@ -150,43 +171,67 @@ export default function Experience({ language = "en" }) {
                         {language === "en" ? "Key Responsibilities" : "Missions Principales"}
                       </h4>
                       <ul className="space-y-2.5">
-                        {exp.missions.map((mission, missionIndex) => (
-                          <motion.li
+                        {exp.missions.map((mission, missionIndex) => {
+                          const { ref: missionRef, isInView: missionInView } = useInView({ threshold: 0.1, triggerOnce: true })
+                          return (
+                          <li
                             key={missionIndex}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: missionIndex * 0.1 }}
+                            ref={missionRef}
                             className="flex items-start gap-2 md:gap-3 text-gray-300 text-sm md:text-base leading-relaxed group/item"
+                            style={{
+                              opacity: missionInView ? 1 : 0,
+                              transform: missionInView ? 'translate3d(0, 0, 0)' : 'translate3d(-20px, 0, 0)',
+                              willChange: 'transform, opacity',
+                              transition: `opacity 0.4s ease-out ${missionIndex * 0.1}s, transform 0.4s ease-out ${missionIndex * 0.1}s`
+                            }}
                           >
-                            <motion.span 
+                            <span 
                               className="text-cyan-400 mt-1.5 flex-shrink-0 text-lg"
-                              animate={{
-                                x: [0, 4, 0],
-                              }}
-                              transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                                delay: missionIndex * 0.2
+                              style={{
+                                willChange: 'transform',
+                                animation: `move-bullet-exp 2s ease-in-out infinite`,
+                                animationDelay: `${missionIndex * 0.2}s`
                               }}
                             >
                               ▸
-                            </motion.span>
+                            </span>
                             <span className="group-hover/item:text-white transition-colors duration-300">
                               {mission}
                             </span>
-                          </motion.li>
-                        ))}
+                          </li>
+                          )
+                        })}
                       </ul>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              </div>
+              )
+            })}
           </div>
         </div>
       </div>
+      <style>{`
+        @keyframes pulse-glow-exp {
+          0%, 100% { opacity: 0.5; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes pulse-overlay-exp {
+          0%, 100% { transform: scale(1); opacity: 0.3; }
+          50% { transform: scale(1.2); opacity: 0.5; }
+        }
+        @keyframes move-bullet-exp {
+          0%, 100% { transform: translate3d(0, 0, 0); }
+          50% { transform: translate3d(4px, 0, 0); }
+        }
+        @media (max-width: 768px) {
+          @keyframes pulse-glow-exp,
+          @keyframes pulse-overlay-exp,
+          @keyframes move-bullet-exp {
+            0%, 100% { }
+          }
+        }
+      `}</style>
     </section>
   )
 }

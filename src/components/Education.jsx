@@ -1,24 +1,29 @@
-import { motion } from "framer-motion"
+import { useInView } from "../hooks/useInView"
 import { GraduationCap, Award, Calendar, BookOpen } from "lucide-react"
 import { data } from "../data/data"
 
 export default function Education({ language = "en" }) {
   const education = data.education[language]
 
+  const { ref: sectionRef, isInView: sectionInView } = useInView({ threshold: 0.1, triggerOnce: true })
+
   return (
     <section id="education" className="py-24 px-4 relative overflow-hidden">
       <div className="container mx-auto max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
+          ref={sectionRef}
           className="text-center mb-16"
+          style={{
+            opacity: sectionInView ? 1 : 0,
+            transform: sectionInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+          }}
         >
           <h2 className="text-4xl md:text-5xl section-title mb-8">
-            {language === "en" ? "Education" : "Formation"}
+            {language === "en" ? "Education" : "Éducation"}
           </h2>
-        </motion.div>
+        </div>
 
         <div className="relative">
           {/* Elegant vertical timeline - hidden on mobile */}
@@ -30,40 +35,51 @@ export default function Education({ language = "en" }) {
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-teal-500/50 via-cyan-500/50 to-emerald-500/50 transform -translate-x-1/2" />
 
           <div className="space-y-14">
-            {education.map((edu, index) => (
-              <motion.div
+            {education.map((edu, index) => {
+              const { ref: eduRef, isInView: eduInView } = useInView({ threshold: 0.1, triggerOnce: true })
+              return (
+              <div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: "easeOut" }}
+                ref={eduRef}
                 className={`relative flex items-center ${
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
+                style={{
+                  opacity: eduInView ? 1 : 0,
+                  transform: eduInView ? 'translate3d(0, 0, 0)' : `translate3d(${index % 2 === 0 ? -60 : 60}px, 0, 0)`,
+                  willChange: 'transform, opacity',
+                  transition: `opacity 0.8s ease-out ${index * 0.2}s, transform 0.8s ease-out ${index * 0.2}s`
+                }}
               >
                 {/* Elegant timeline node */}
                 <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 z-20">
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.3, type: "spring", stiffness: 200 }}
-                    whileHover={{ scale: 1.15, rotate: 5 }}
+                  <div
                     className="relative"
+                    style={{
+                      opacity: eduInView ? 1 : 0,
+                      transform: eduInView ? 'scale(1) rotate(0deg)' : 'scale(0) rotate(-180deg)',
+                      willChange: 'transform, opacity',
+                      transition: `opacity 0.6s ease-out ${index * 0.2 + 0.3}s, transform 0.6s ease-out ${index * 0.2 + 0.3}s`
+                    }}
+                    onMouseEnter={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'scale(1.15) rotate(5deg)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'scale(1) rotate(0deg)'
+                      }
+                    }}
                   >
                     {/* Glowing ring */}
-                    <motion.div
-                      animate={{
-                        opacity: [0.4, 0.8, 0.4],
-                        scale: [1, 1.15, 1],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.4
-                      }}
+                    <div
                       className="absolute inset-0 rounded-full bg-gradient-to-br from-teal-400 to-emerald-400 blur-md -z-10"
+                      style={{
+                        willChange: 'opacity, transform',
+                        animation: `pulse-glow-edu 3s ease-in-out infinite`,
+                        animationDelay: `${index * 0.4}s`
+                      }}
                     />
                     
                     {/* Icon container with elegant design */}
@@ -74,7 +90,7 @@ export default function Education({ language = "en" }) {
                     >
                       <GraduationCap className="w-5 h-5 md:w-6 md:h-6 text-teal-300" />
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
 
                 {/* Content card with academic style */}
@@ -83,29 +99,35 @@ export default function Education({ language = "en" }) {
                     index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
                   }`}
                 >
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.1 }}
-                    whileHover={{ y: -6, scale: 1.01 }}
+                  <div
                     className="glass-card rounded-2xl p-5 md:p-7 relative overflow-hidden group w-full"
+                    style={{
+                      opacity: eduInView ? 1 : 0,
+                      transform: eduInView ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 20px, 0) scale(1)',
+                      willChange: 'transform, opacity',
+                      transition: `opacity 0.6s ease-out ${index * 0.2 + 0.1}s, transform 0.6s ease-out ${index * 0.2 + 0.1}s`
+                    }}
+                    onMouseEnter={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, -6px, 0) scale(1.01)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, 0, 0) scale(1)'
+                      }
+                    }}
                   >
                     {/* Top accent border */}
                     <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-400 via-cyan-400 to-emerald-400 rounded-t-2xl" />
                     
                     {/* Subtle gradient overlay */}
-                    <motion.div
+                    <div
                       className="absolute top-0 right-0 w-56 h-56 bg-gradient-to-br from-teal-500/8 via-cyan-500/5 to-transparent rounded-full blur-3xl -z-10"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0.2, 0.4, 0.2],
-                      }}
-                      transition={{
-                        duration: 5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.6
+                      style={{
+                        willChange: 'transform, opacity',
+                        animation: `pulse-overlay-edu 5s ease-in-out infinite`,
+                        animationDelay: `${index * 0.6}s`
                       }}
                     />
                     
@@ -113,13 +135,25 @@ export default function Education({ language = "en" }) {
                     <div className="mb-5">
                       <div className="flex items-start gap-4 mb-4">
                         {/* Icon badge */}
-                        <motion.div
-                          whileHover={{ rotate: 360, scale: 1.1 }}
-                          transition={{ duration: 0.6 }}
+                        <div
                           className="p-3 rounded-xl bg-gradient-to-br from-teal-500/20 to-emerald-500/20 border border-teal-400/40 flex-shrink-0"
+                          style={{
+                            willChange: 'transform',
+                            transition: 'transform 0.6s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (window.innerWidth > 768) {
+                              e.currentTarget.style.transform = 'rotate(360deg) scale(1.1)'
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (window.innerWidth > 768) {
+                              e.currentTarget.style.transform = 'rotate(0deg) scale(1)'
+                            }
+                          }}
                         >
                           <Award className="w-6 h-6 text-teal-300" />
-                        </motion.div>
+                        </div>
                         
                         {/* Title and institution */}
                         <div className="flex-1">
@@ -144,42 +178,66 @@ export default function Education({ language = "en" }) {
 
                     {/* Description */}
                     <div className="space-y-2.5 pt-4 border-t border-white/10">
-                      {edu.description.map((desc, descIndex) => (
-                        <motion.div
+                      {edu.description.map((desc, descIndex) => {
+                        const { ref: descRef, isInView: descInView } = useInView({ threshold: 0.1, triggerOnce: true })
+                        return (
+                        <div
                           key={descIndex}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.4, delay: descIndex * 0.1 }}
+                          ref={descRef}
                           className="flex items-start gap-2 md:gap-3 text-gray-300 text-sm md:text-base leading-relaxed group/item"
+                          style={{
+                            opacity: descInView ? 1 : 0,
+                            transform: descInView ? 'translate3d(0, 0, 0)' : 'translate3d(-10px, 0, 0)',
+                            willChange: 'transform, opacity',
+                            transition: `opacity 0.4s ease-out ${descIndex * 0.1}s, transform 0.4s ease-out ${descIndex * 0.1}s`
+                          }}
                         >
-                          <motion.span 
+                          <span 
                             className="text-teal-400 mt-1 flex-shrink-0 text-lg"
-                            animate={{
-                              rotate: [0, 10, 0],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                              delay: descIndex * 0.3
+                            style={{
+                              willChange: 'transform',
+                              animation: `rotate-bullet 2s ease-in-out infinite`,
+                              animationDelay: `${descIndex * 0.3}s`
                             }}
                           >
                             •
-                          </motion.span>
+                          </span>
                           <span className="group-hover/item:text-white transition-colors duration-300">
                             {desc}
                           </span>
-                        </motion.div>
-                      ))}
+                        </div>
+                        )
+                      })}
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              </div>
+              )
+            })}
           </div>
         </div>
       </div>
+      <style>{`
+        @keyframes pulse-glow-edu {
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.15); }
+        }
+        @keyframes pulse-overlay-edu {
+          0%, 100% { transform: scale(1); opacity: 0.2; }
+          50% { transform: scale(1.3); opacity: 0.4; }
+        }
+        @keyframes rotate-bullet {
+          0%, 100% { transform: rotate(0deg); }
+          50% { transform: rotate(10deg); }
+        }
+        @media (max-width: 768px) {
+          @keyframes pulse-glow-edu,
+          @keyframes pulse-overlay-edu,
+          @keyframes rotate-bullet {
+            0%, 100% { }
+          }
+        }
+      `}</style>
     </section>
   )
 }

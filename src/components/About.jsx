@@ -1,6 +1,6 @@
-import { motion } from "framer-motion"
 import { Code2, Sparkles, Rocket, Target } from "lucide-react"
 import { data } from "../data/data"
+import { useInView } from "../hooks/useInView"
 
 export default function About({ language = "en" }) {
   const description = data.descriptionPersonnelle[language]
@@ -41,16 +41,24 @@ export default function About({ language = "en" }) {
     }
   ]
 
+  const { ref: titleRef, isInView: titleInView } = useInView({ threshold: 0.1, rootMargin: "-100px", triggerOnce: true })
+  const { ref: subtitleRef, isInView: subtitleInView } = useInView({ threshold: 0.1, rootMargin: "-100px", triggerOnce: true })
+  const { ref: leftRef, isInView: leftInView } = useInView({ threshold: 0.1, rootMargin: "-100px", triggerOnce: true })
+  const { ref: rightRef, isInView: rightInView } = useInView({ threshold: 0.1, rootMargin: "-100px", triggerOnce: true })
+
   return (
     <section id="about" className="py-24 px-4 relative overflow-hidden">
       <div className="container mx-auto max-w-6xl">
         {/* Title Section */}
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+        <div
+          ref={titleRef}
           className="flex flex-col items-center mb-16"
+          style={{
+            opacity: titleInView ? 1 : 0,
+            transform: titleInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, -50px, 0)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+          }}
         >
           {/* Section Title */}
           <h2 className="text-4xl md:text-5xl section-title mb-8">
@@ -58,33 +66,40 @@ export default function About({ language = "en" }) {
           </h2>
 
           {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          <p
+            ref={subtitleRef}
             className="text-xl md:text-2xl text-gray-400 font-display font-light tracking-wide"
+            style={{
+              opacity: subtitleInView ? 1 : 0,
+              willChange: 'opacity',
+              transition: 'opacity 0.8s ease-out 0.3s'
+            }}
           >
             {language === "en" ? "Get to know me better" : "Apprenez à mieux me connaître"}
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left: Description */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <div
+            ref={leftRef}
             className="space-y-6"
+            style={{
+              opacity: leftInView ? 1 : 0,
+              transform: leftInView ? 'translate3d(0, 0, 0)' : 'translate3d(-50px, 0, 0)',
+              willChange: 'transform, opacity',
+              transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s'
+            }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+            <div
               className="glass-card rounded-2xl p-8 md:p-10"
+              style={{
+                opacity: leftInView ? 1 : 0,
+                transform: leftInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+                willChange: 'transform, opacity',
+                transition: 'opacity 0.6s ease-out 0.4s, transform 0.6s ease-out 0.4s'
+              }}
             >
               <h3 className="text-2xl md:text-3xl font-display font-semibold mb-6 text-white">
                 {language === "en" ? "Who I Am" : "Qui Je Suis"}
@@ -92,18 +107,18 @@ export default function About({ language = "en" }) {
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">
                 {description}
               </p>
-            </motion.div>
+            </div>
 
             {/* Professional Description */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+            <div
               className="glass-card rounded-2xl p-8 md:p-10 border-l-4"
               style={{
                 borderLeftColor: '#00F0FF',
-                borderLeftWidth: '4px'
+                borderLeftWidth: '4px',
+                opacity: leftInView ? 1 : 0,
+                transform: leftInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+                willChange: 'transform, opacity',
+                transition: 'opacity 0.6s ease-out 0.6s, transform 0.6s ease-out 0.6s'
               }}
             >
               <h3 className="text-xl md:text-2xl font-display font-semibold mb-4 gradient-text">
@@ -112,16 +127,19 @@ export default function About({ language = "en" }) {
               <p className="text-base md:text-lg text-gray-300 leading-relaxed">
                 {profession.description}
               </p>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Right: Features Grid */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          <div
+            ref={rightRef}
             className="space-y-6"
+            style={{
+              opacity: rightInView ? 1 : 0,
+              transform: rightInView ? 'translate3d(0, 0, 0)' : 'translate3d(50px, 0, 0)',
+              willChange: 'transform, opacity',
+              transition: 'opacity 0.8s ease-out 0.3s, transform 0.8s ease-out 0.3s'
+            }}
           >
             <h3 className="text-2xl md:text-3xl font-display font-semibold text-white text-center lg:text-left mb-8">
               <span className="gradient-text">
@@ -132,23 +150,28 @@ export default function About({ language = "en" }) {
             <div className="grid sm:grid-cols-2 gap-6">
               {features.map((feature, index) => {
                 const Icon = feature.icon
+                const { ref: featureRef, isInView: featureInView } = useInView({ threshold: 0.1, triggerOnce: true })
                 return (
-                  <motion.div
+                  <div
                     key={feature.title}
-                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      duration: 0.5, 
-                      delay: 0.4 + index * 0.1,
-                      ease: "easeOut"
-                    }}
-                    whileHover={{ 
-                      y: -8, 
-                      scale: 1.02,
-                      transition: { duration: 0.3 }
-                    }}
+                    ref={featureRef}
                     className="glass-card rounded-2xl p-6 relative overflow-hidden group"
+                    style={{
+                      opacity: featureInView ? 1 : 0,
+                      transform: featureInView ? 'translate3d(0, 0, 0) scale(1)' : 'translate3d(0, 30px, 0) scale(0.9)',
+                      willChange: 'transform, opacity',
+                      transition: `opacity 0.5s ease-out ${0.4 + index * 0.1}s, transform 0.5s ease-out ${0.4 + index * 0.1}s`
+                    }}
+                    onMouseEnter={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, -8px, 0) scale(1.02)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (window.innerWidth > 768) {
+                        e.currentTarget.style.transform = 'translate3d(0, 0, 0) scale(1)'
+                      }
+                    }}
                   >
                     {/* Gradient background on hover */}
                     <div 
@@ -156,13 +179,25 @@ export default function About({ language = "en" }) {
                     />
                     
                     {/* Icon */}
-                    <motion.div
-                      whileHover={{ rotate: 360, scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
+                    <div
                       className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.gradient} mb-4`}
+                      style={{
+                        willChange: 'transform',
+                        transition: 'transform 0.6s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (window.innerWidth > 768) {
+                          e.currentTarget.style.transform = 'rotate(360deg) scale(1.1)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (window.innerWidth > 768) {
+                          e.currentTarget.style.transform = 'rotate(0deg) scale(1)'
+                        }
+                      }}
                     >
                       <Icon className="w-6 h-6 text-white" />
-                    </motion.div>
+                    </div>
 
                     {/* Content */}
                     <h4 className="text-xl font-display font-semibold text-white mb-2">
@@ -173,14 +208,18 @@ export default function About({ language = "en" }) {
                     </p>
 
                     {/* Shine effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
+                    <div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full"
+                      style={{
+                        willChange: 'transform',
+                        transition: 'transform 1s ease'
+                      }}
                     />
-                  </motion.div>
+                  </div>
                 )
               })}
             </div>
-          </motion.div>
+          </div>
         </div>
 
       </div>
@@ -188,6 +227,13 @@ export default function About({ language = "en" }) {
       {/* Background decorative elements - Cyan/Turquoise/Green */}
       <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl -z-10" style={{ background: 'radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%)' }} />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl -z-10" style={{ background: 'radial-gradient(circle, rgba(20, 184, 166, 0.1) 0%, transparent 70%)' }} />
+      <style>{`
+        @media (max-width: 768px) {
+          .glass-card:hover {
+            transform: none !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

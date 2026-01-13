@@ -1,6 +1,6 @@
-import { motion } from "framer-motion"
 import { MapPin, Shield } from "lucide-react"
 import logoFooter from "../assets/LogoFooter.png"
+import { useInView } from "../hooks/useInView"
 
 export default function Footer({ language = "en" }) {
   const address = language === "en" 
@@ -15,23 +15,30 @@ export default function Footer({ language = "en" }) {
     ? "Protected by copyright"
     : "Protégé par copyright"
 
+  const { ref, isInView } = useInView({ threshold: 0.1, triggerOnce: true })
+
   return (
     <footer className="relative border-t border-white/10 bg-background/80 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-5">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+        <div
+          ref={ref}
           className="flex flex-col md:flex-row items-center justify-between gap-3"
+          style={{
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+            willChange: 'transform, opacity',
+            transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
+          }}
         >
           {/* Logo and Copyright */}
           <div className="flex items-center gap-3">
             <img 
               src={logoFooter} 
               alt="CL Logo" 
-              className="h-7 md:h-8 w-auto opacity-90 hover:opacity-100 transition-all duration-300 filter drop-shadow-[0_0_8px_rgba(0,240,255,0.3)] hover:drop-shadow-[0_0_12px_rgba(0,240,255,0.5)]"
               loading="lazy"
+              decoding="async"
+              className="h-7 md:h-8 w-auto opacity-90 hover:opacity-100 transition-all duration-300 filter drop-shadow-[0_0_8px_rgba(0,240,255,0.3)] hover:drop-shadow-[0_0_12px_rgba(0,240,255,0.5)]"
+              style={{ willChange: 'opacity, filter' }}
             />
             <div className="text-xs md:text-sm text-gray-400 font-medium">
               © {new Date().getFullYear()} Chedly Laadhiby - {copyrightText}
@@ -49,7 +56,7 @@ export default function Footer({ language = "en" }) {
               <span>{protectedText}</span>
             </div> 
                       </div>
-        </motion.div>
+        </div>
       </div>
     </footer>
   )

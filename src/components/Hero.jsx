@@ -1,12 +1,139 @@
-import { motion } from "framer-motion"
 import { ArrowDown, Download } from "lucide-react"
 import { data } from "../data/data"
 import moiImage from "../assets/Moi.png"
 import cvFile from "../assets/Chedly Laadhiby CV (Fr)..pdf"
+import { useEffect, useRef, useState } from "react"
 
 export default function Hero({ language = "en" }) {
   const personal = data.personal[language]
   const profession = data.profession[language]
+  const [mounted, setMounted] = useState(false)
+  const leftContentRef = useRef(null)
+  const rightContentRef = useRef(null)
+  const badgeRef = useRef(null)
+  const titleRef = useRef(null)
+  const taglineRef = useRef(null)
+  const quoteRef = useRef(null)
+  const buttonsRef = useRef(null)
+  const imageRef = useRef(null)
+  const outerCircleRef = useRef(null)
+  const middleCircleRef = useRef(null)
+  const innerCircleRef = useRef(null)
+  const scrollIndicatorRef = useRef(null)
+
+  useEffect(() => {
+    setMounted(true)
+    // Animate elements on mount
+    const animateElements = () => {
+      // Left content
+      if (leftContentRef.current) {
+        leftContentRef.current.style.opacity = '0'
+        leftContentRef.current.style.transform = 'translate3d(-50px, 0, 0)'
+        requestAnimationFrame(() => {
+          if (leftContentRef.current) {
+            leftContentRef.current.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out'
+            leftContentRef.current.style.opacity = '1'
+            leftContentRef.current.style.transform = 'translate3d(0, 0, 0)'
+          }
+        })
+      }
+      // Badge
+      if (badgeRef.current) {
+        badgeRef.current.style.opacity = '0'
+        badgeRef.current.style.transform = 'scale(0.9)'
+        setTimeout(() => {
+          if (badgeRef.current) {
+            badgeRef.current.style.transition = 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s'
+            badgeRef.current.style.opacity = '1'
+            badgeRef.current.style.transform = 'scale(1)'
+          }
+        }, 50)
+      }
+      // Title
+      if (titleRef.current) {
+        titleRef.current.style.opacity = '0'
+        titleRef.current.style.transform = 'translate3d(0, 20px, 0) scale(0.9)'
+        setTimeout(() => {
+          if (titleRef.current) {
+            titleRef.current.style.transition = 'opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s'
+            titleRef.current.style.opacity = '1'
+            titleRef.current.style.transform = 'translate3d(0, 0, 0) scale(1)'
+          }
+        }, 50)
+      }
+      // Tagline
+      if (taglineRef.current) {
+        taglineRef.current.style.opacity = '0'
+        taglineRef.current.style.transform = 'translate3d(0, 20px, 0)'
+        setTimeout(() => {
+          if (taglineRef.current) {
+            taglineRef.current.style.transition = 'opacity 0.8s ease-out 0.6s, transform 0.8s ease-out 0.6s'
+            taglineRef.current.style.opacity = '1'
+            taglineRef.current.style.transform = 'translate3d(0, 0, 0)'
+          }
+        }, 50)
+      }
+      // Quote
+      if (quoteRef.current) {
+        quoteRef.current.style.opacity = '0'
+        quoteRef.current.style.transform = 'translate3d(0, 20px, 0)'
+        setTimeout(() => {
+          if (quoteRef.current) {
+            quoteRef.current.style.transition = 'opacity 0.8s ease-out 0.8s, transform 0.8s ease-out 0.8s'
+            quoteRef.current.style.opacity = '1'
+            quoteRef.current.style.transform = 'translate3d(0, 0, 0)'
+          }
+        }, 50)
+      }
+      // Buttons
+      if (buttonsRef.current) {
+        buttonsRef.current.style.opacity = '0'
+        buttonsRef.current.style.transform = 'translate3d(0, 20px, 0)'
+        setTimeout(() => {
+          if (buttonsRef.current) {
+            buttonsRef.current.style.transition = 'opacity 0.8s ease-out 1s, transform 0.8s ease-out 1s'
+            buttonsRef.current.style.opacity = '1'
+            buttonsRef.current.style.transform = 'translate3d(0, 0, 0)'
+          }
+        }, 50)
+      }
+      // Right content
+      if (rightContentRef.current) {
+        rightContentRef.current.style.opacity = '0'
+        rightContentRef.current.style.transform = 'translate3d(50px, 0, 0)'
+        setTimeout(() => {
+          if (rightContentRef.current) {
+            rightContentRef.current.style.transition = 'opacity 0.8s ease-out 0.3s, transform 0.8s ease-out 0.3s'
+            rightContentRef.current.style.opacity = '1'
+            rightContentRef.current.style.transform = 'translate3d(0, 0, 0)'
+          }
+        }, 50)
+      }
+      // Image
+      if (imageRef.current) {
+        imageRef.current.style.opacity = '0'
+        imageRef.current.style.transform = 'scale(1.1)'
+        setTimeout(() => {
+          if (imageRef.current) {
+            imageRef.current.style.transition = 'opacity 0.8s ease-out 0.9s, transform 0.8s ease-out 0.9s'
+            imageRef.current.style.opacity = '1'
+            imageRef.current.style.transform = 'scale(1)'
+          }
+        }, 50)
+      }
+      // Scroll indicator
+      if (scrollIndicatorRef.current) {
+        scrollIndicatorRef.current.style.opacity = '0'
+        setTimeout(() => {
+          if (scrollIndicatorRef.current) {
+            scrollIndicatorRef.current.style.transition = 'opacity 0.8s ease-out 1.2s'
+            scrollIndicatorRef.current.style.opacity = '1'
+          }
+        }, 50)
+      }
+    }
+    animateElements()
+  }, [])
 
   const handleScroll = () => {
     const projectsSection = document.querySelector("#projects")
@@ -27,108 +154,108 @@ export default function Hero({ language = "en" }) {
       <div className="relative z-10 container mx-auto px-4 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+          <div
+            ref={leftContentRef}
             className="text-center lg:text-left"
+            style={{ willChange: 'transform, opacity' }}
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+            <div
+              ref={badgeRef}
               className="mb-6"
+              style={{ willChange: 'transform, opacity' }}
             >
               <div className="inline-block px-4 py-2 rounded-full glass mb-6">
                 <span className="text-sm text-primary font-medium">
                   {profession.mainTitle || profession.titrePrincipal}
                 </span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 100 }}
+            <h1
+              ref={titleRef}
               className="text-5xl md:text-6xl lg:text-7xl mb-6"
+              style={{ willChange: 'transform, opacity' }}
             >
               <span className="gradient-text font-futuristic">
                 {personal.fullName || personal.nomComplet}
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+            <p
+              ref={taglineRef}
               className="text-xl md:text-2xl text-gray-300 mb-6"
+              style={{ willChange: 'transform, opacity' }}
             >
               {profession.tagline || profession.tagline}
-            </motion.p>
+            </p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+            <p
+              ref={quoteRef}
               className="text-lg text-gray-400 mb-10 max-w-xl"
+              style={{ willChange: 'transform, opacity' }}
             >
               {profession.quote || profession.citation}
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1 }}
+            <div
+              ref={buttonsRef}
               className="flex flex-col sm:flex-row gap-4"
+              style={{ willChange: 'transform, opacity' }}
             >
               <button
                 onClick={handleScroll}
-                className="group relative px-8 py-4 bg-primary/20 hover:bg-primary/30 border border-primary/50 rounded-full text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/50"
+                className="group relative px-8 py-4 bg-primary/20 hover:bg-primary/30 border border-primary/50 rounded-full text-white font-semibold"
+                style={{
+                  willChange: 'transform',
+                  transition: 'transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)'
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 102, 255, 0.5)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               >
                 <span className="flex items-center justify-center gap-2">
                   {language === "en" ? "View Projects" : "Voir Projets"}
-                  <ArrowDown className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
+                  <ArrowDown className="w-5 h-5 transition-transform duration-300 group-hover:translate-y-1" />
                 </span>
               </button>
 
               <button
                 onClick={handleDownload}
-                className="group px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-semibold transition-all duration-300 hover:scale-105"
+                className="group px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-semibold"
+                style={{
+                  willChange: 'transform',
+                  transition: 'transform 0.3s ease, background-color 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)'
+                }}
               >
                 <span className="flex items-center justify-center gap-2">
                   <Download className="w-5 h-5" />
                   {language === "en" ? "Download CV" : "Télécharger CV"}
                 </span>
               </button>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Right side - Photo with animated circle */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          <div
+            ref={rightContentRef}
             className="flex justify-center lg:justify-end"
+            style={{ willChange: 'transform, opacity' }}
           >
             <div className="relative">
               {/* Outer animated circle */}
-              <motion.div
-                animate={{
-                  rotate: 360,
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  rotate: {
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear"
-                  },
-                  scale: {
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
-                }}
+              <div
+                ref={outerCircleRef}
                 className="absolute inset-0 rounded-full border-4 border-primary/30"
                 style={{
                   width: '420px',
@@ -136,27 +263,14 @@ export default function Hero({ language = "en" }) {
                   top: '50%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
+                  willChange: 'transform',
+                  animation: 'rotate-circle 20s linear infinite, pulse-scale 3s ease-in-out infinite'
                 }}
               />
 
               {/* Middle animated circle */}
-              <motion.div
-                animate={{
-                  rotate: -360,
-                  scale: [1, 1.03, 1],
-                }}
-                transition={{
-                  rotate: {
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "linear"
-                  },
-                  scale: {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
-                }}
+              <div
+                ref={middleCircleRef}
                 className="absolute inset-0 rounded-full border-2 border-primary/50"
                 style={{
                   width: '380px',
@@ -164,87 +278,75 @@ export default function Hero({ language = "en" }) {
                   top: '50%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
+                  willChange: 'transform',
+                  animation: 'rotate-circle-reverse 15s linear infinite, pulse-scale-slow 4s ease-in-out infinite'
                 }}
               />
 
               {/* Inner circle with glow effect */}
-              <motion.div
-                animate={{
-                  boxShadow: [
-                    '0 0 20px rgba(0, 240, 255, 0.3)',
-                    '0 0 40px rgba(0, 240, 255, 0.5)',
-                    '0 0 20px rgba(0, 240, 255, 0.3)',
-                  ],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
+              <div
+                ref={innerCircleRef}
                 className="relative rounded-full overflow-hidden border-4 border-primary"
                 style={{
                   width: '350px',
                   height: '350px',
+                  willChange: 'box-shadow',
+                  animation: 'glow-pulse 2s ease-in-out infinite'
                 }}
               >
                 {/* Photo */}
-                <motion.img
+                <img
+                  ref={imageRef}
                   src={moiImage}
                   alt={personal.fullName || personal.nomComplet}
-                  initial={{ scale: 1.1, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.6 }}
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover"
+                  style={{ willChange: 'transform, opacity' }}
                 />
 
                 {/* Gradient overlay for depth */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/20 pointer-events-none" />
-              </motion.div>
+              </div>
 
-              {/* Floating particles effect */}
+              {/* Floating particles effect - disabled on mobile */}
               {[...Array(6)].map((_, i) => (
-                <motion.div
+                <div
                   key={i}
-                  className="absolute rounded-full bg-primary/40"
+                  className="absolute rounded-full bg-primary/40 hidden md:block"
                   style={{
                     width: '8px',
                     height: '8px',
                     top: `${20 + i * 15}%`,
                     left: `${10 + (i % 2) * 80}%`,
-                  }}
-                  animate={{
-                    y: [0, -20, 0],
-                    opacity: [0.4, 1, 0.4],
-                    scale: [1, 1.5, 1],
-                  }}
-                  transition={{
-                    duration: 2 + i * 0.3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: i * 0.2,
+                    willChange: 'transform, opacity',
+                    animation: `float-particle 2s ease-in-out infinite`,
+                    animationDelay: `${i * 0.2}s`,
+                    animationDuration: `${2 + i * 0.3}s`
                   }}
                 />
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
+        <div
+          ref={scrollIndicatorRef}
           className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+          style={{ willChange: 'opacity' }}
         >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+          <div
             className="cursor-pointer"
             onClick={handleScroll}
+            style={{
+              willChange: 'transform',
+              animation: 'bounce-arrow 2s ease-in-out infinite'
+            }}
           >
             <ArrowDown className="w-6 h-6 text-white/50 hover:text-white transition-colors" />
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
 
       {/* Background gradient effect */}
@@ -254,6 +356,45 @@ export default function Hero({ language = "en" }) {
       >
         <div className="absolute -top-10 left-1/2 w-full h-full -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(0,102,255,0.15),transparent_50%)] blur-[80px]" />
       </div>
+      <style>{`
+        @keyframes rotate-circle {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes rotate-circle-reverse {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+        @keyframes pulse-scale {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+        @keyframes pulse-scale-slow {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.03); }
+        }
+        @keyframes glow-pulse {
+          0%, 100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
+          50% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.5); }
+        }
+        @keyframes float-particle {
+          0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.4; }
+          50% { transform: translate3d(0, -20px, 0); opacity: 1; }
+        }
+        @keyframes bounce-arrow {
+          0%, 100% { transform: translate3d(0, 0, 0); }
+          50% { transform: translate3d(0, 10px, 0); }
+        }
+        @media (max-width: 768px) {
+          @keyframes rotate-circle,
+          @keyframes rotate-circle-reverse,
+          @keyframes pulse-scale,
+          @keyframes pulse-scale-slow,
+          @keyframes glow-pulse {
+            0%, 100% { }
+          }
+        }
+      `}</style>
     </section>
   )
 }

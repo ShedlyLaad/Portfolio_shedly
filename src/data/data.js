@@ -21,9 +21,9 @@ export const data = {
         }
       },
       "en": {
-        "firstName": "Chedly",
+        "firstName": "Shedly",
         "lastName": "Laadhiby",
-        "fullName": "Chedly Laadhiby",
+        "fullName": "Shedly Laadhiby",
         "location": {
           "city": "Soliman",
           "country": "Tunisia",

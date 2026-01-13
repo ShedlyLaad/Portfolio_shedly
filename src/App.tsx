@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { DottedSurface } from './components/ui/dotted-surface'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Copyright from './components/Copyright'
 import Hero from './components/Hero'
-import About from './components/About'
-import Skills from './components/Skills'
-import Education from './components/Education'
-import Experience from './components/Experience'
-import Projects from './components/Projects'
-import Contact from './components/Contact'
+
+// Lazy load heavy sections
+const About = lazy(() => import('./components/About'))
+const Skills = lazy(() => import('./components/Skills'))
+const Education = lazy(() => import('./components/Education'))
+const Experience = lazy(() => import('./components/Experience'))
+const Projects = lazy(() => import('./components/Projects'))
+const Contact = lazy(() => import('./components/Contact'))
 
 function App() {
   const [language, setLanguage] = useState<'en' | 'fr'>('en')
@@ -39,12 +41,14 @@ function App() {
         <Navbar language={language} setLanguage={setLanguage} />
         <main className="relative z-10">
           <Hero language={language} />
-          <About language={language} />
-          <Skills language={language} />
-          <Education language={language} />
-          <Experience language={language} />
-          <Projects language={language} />
-          <Contact language={language} />
+          <Suspense fallback={<div className="min-h-screen" />}>
+            <About language={language} />
+            <Skills language={language} />
+            <Education language={language} />
+            <Experience language={language} />
+            <Projects language={language} />
+            <Contact language={language} />
+          </Suspense>
         </main>
         <Footer language={language} />
       </div>

@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect } from "react"
-import { motion } from "framer-motion"
+import { useState, useRef, useEffect, memo, useCallback } from "react"
 import { ExternalLink, Github, Play } from "lucide-react"
 import { data } from "../data/data"
 import { VideoModal } from "./ui/video-modal"
 import { cn } from "../lib/utils"
+import { useInView } from "../hooks/useInView"
 
 // Import project images
 import jobBoardImage from "../assets/Projects/Job-Board.png"
@@ -50,6 +50,240 @@ const getProjectAssets = (title) => {
     video: videoMap[titleLower] || null,
   }
 }
+
+// Helper functions for video control
+const handleVideoPlay = (video) => {
+  if (video) {
+    video.play().catch(() => {
+      // Handle autoplay restrictions
+    })
+  }
+}
+
+const handleVideoPause = (video) => {
+  if (video) {
+    video.pause()
+    video.currentTime = 0
+  }
+}
+
+// Project Card Component with React.memo
+const ProjectCard = memo(({ project, index, language, isMobile, hoveredIndex, setHoveredIndex, visibleIndex, openVideoModal, videoRefs, cardRefs, onVideoPlay, onVideoPause }) => {
+  const title = project.title || project.titre
+  const { image, video } = getProjectAssets(title)
+  const isHovered = hoveredIndex === index
+  const isVisible = visibleIndex === index
+  const shouldShowVideo = isMobile ? isVisible : isHovered
+  const { ref: inViewRef, isInView } = useInView({ threshold: 0.1, rootMargin: "-50px", triggerOnce: true })
+  
+  // Store cardRefs in a ref to avoid dependency issues
+  const cardRefsRef = useRef(cardRefs)
+  const inViewRefStable = useRef(inViewRef)
+  
+  useEffect(() => {
+    cardRefsRef.current = cardRefs
+    inViewRefStable.current = inViewRef
+  }, [cardRefs, inViewRef])
+
+  // Combine refs: one for IntersectionObserver, one for cardRefs
+  // Apply both refs to the same DOM element
+  // Use a callback ref that handles both refs - must always be a function
+  // React requires: function, React.createRef() object, or undefined/null
+  const setRefs = useCallback((el) => {
+    // Store in cardRefs for video control
+    const currentCardRefs = cardRefsRef.current
+    if (currentCardRefs && typeof currentCardRefs === 'object' && currentCardRefs !== null && 'current' in currentCardRefs && currentCardRefs.current) {
+      if (el) {
+        currentCardRefs.current[index] = el
+      } else {
+        delete currentCardRefs.current[index]
+      }
+    }
+    // Assign to useInView ref (useRef object) - must be a valid useRef
+    // Use stable ref to avoid dependency issues
+    const currentInViewRef = inViewRefStable.current
+    if (currentInViewRef && typeof currentInViewRef === 'object' && currentInViewRef !== null && 'current' in currentInViewRef) {
+      currentInViewRef.current = el
+    }
+  }, [index]) // Only index as dependency - refs are stored in refs
+
+  return (
+    <div
+      ref={setRefs}
+      data-index={index}
+      className="group glass-card rounded-2xl overflow-hidden relative"
+      style={{
+        opacity: isInView ? 1 : 0,
+        transform: isInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+        willChange: 'transform, opacity',
+        transition: `opacity 0.8s ease-out ${index * 0.1}s, transform 0.8s ease-out ${index * 0.1}s`
+      }}
+      onMouseEnter={() => !isMobile && setHoveredIndex(index)}
+      onMouseLeave={() => !isMobile && setHoveredIndex(null)}
+    >
+      {/* Project Image/Video Container */}
+      {(image || video) && (
+        <div className="relative w-full h-48 bg-black/50 overflow-hidden">
+          {/* Cover Image */}
+          {image && (
+            <img
+              src={image}
+              alt={title}
+              loading="lazy"
+              decoding="async"
+              className={cn(
+                "w-full h-full object-cover transition-opacity duration-300",
+                shouldShowVideo && video ? "opacity-0" : "opacity-100"
+              )}
+              style={{ willChange: 'opacity' }}
+            />
+          )}
+
+          {/* Video on Hover (Desktop) or Scroll (Mobile) */}
+          {video && (
+            <video
+              ref={(el) => (videoRefs.current[index] = el)}
+              src={video}
+              muted
+              loop
+              playsInline
+              className={cn(
+                "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
+                shouldShowVideo ? "opacity-100 z-10" : "opacity-0 z-0"
+              )}
+              style={{ willChange: 'opacity' }}
+              onMouseEnter={() => !isMobile && onVideoPlay(index)}
+              onMouseLeave={() => !isMobile && onVideoPause(index)}
+            />
+          )}
+
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent pointer-events-none z-20" />
+        </div>
+      )}
+
+      {/* Gradient overlay on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+      {/* Content */}
+      <div className="relative z-10 p-6">
+        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+
+        <p className="text-gray-300 mb-6 leading-relaxed text-sm">
+          {project.description}
+        </p>
+
+        {/* Tech stack */}
+        {project.technologies && project.technologies.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {project.technologies.map((tech, techIndex) => (
+              <span
+                key={techIndex}
+                className="px-3 py-1 text-xs rounded-full bg-primary/20 text-primary border border-primary/30"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Links */}
+        <div className="flex flex-wrap gap-3">
+          {/* Demo Video Button */}
+          {video && (
+            <button
+              onClick={() => openVideoModal(video, title)}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-medium transition-all duration-300"
+              style={{
+                willChange: 'transform',
+                transition: 'transform 0.3s ease, background-color 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
+            >
+              <Play className="w-4 h-4" />
+              {language === "en" ? "Demo" : "Démo"}
+            </button>
+          )}
+
+          {(project.githubLink || project.lienGitHub) && (
+            <a
+              href={project.githubLink || project.lienGitHub}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-medium transition-all duration-300"
+              style={{
+                willChange: 'transform',
+                transition: 'transform 0.3s ease, background-color 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
+            >
+              <Github className="w-4 h-4" />
+              {language === "en" ? "Code" : "Code"}
+            </a>
+          )}
+
+          {(project.demoLink || project.lienDemo) && (
+            <a
+              href={project.demoLink || project.lienDemo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-medium transition-all duration-300"
+              style={{
+                willChange: 'transform',
+                transition: 'transform 0.3s ease, background-color 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
+            >
+              <ExternalLink className="w-4 h-4" />
+              {language === "en" ? "Live" : "Live"}
+            </a>
+          )}
+
+          {(project.linkedinLink || project.lienLinkedIn) && (
+            <a
+              href={project.linkedinLink || project.lienLinkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-medium transition-all duration-300"
+              style={{
+                willChange: 'transform',
+                transition: 'transform 0.3s ease, background-color 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
+            >
+              <ExternalLink className="w-4 h-4" />
+              {language === "en" ? "View" : "Voir"}
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+})
+
+ProjectCard.displayName = 'ProjectCard'
 
 export default function Projects({ language = "en" }) {
   const projects = data.projets[language]
@@ -162,16 +396,38 @@ export default function Projects({ language = "en" }) {
     setSelectedTitle(null)
   }
 
+  const onVideoPlay = (index) => {
+    const video = videoRefs.current?.[index]
+    if (video) {
+      video.play().catch(() => {
+        // Handle autoplay restrictions
+      })
+    }
+  }
+
+  const onVideoPause = (index) => {
+    const video = videoRefs.current?.[index]
+    if (video) {
+      video.pause()
+      video.currentTime = 0
+    }
+  }
+
+  const { ref: sectionRef, isInView: sectionInView } = useInView({ threshold: 0.1, triggerOnce: true })
+
   return (
     <>
       <section id="projects" className="py-24 px-4 relative">
         <div className="container mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+          <div
+            ref={sectionRef}
             className="text-center mb-12"
+            style={{
+              opacity: sectionInView ? 1 : 0,
+              transform: sectionInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',
+              willChange: 'transform, opacity',
+              transition: 'opacity 0.8s ease-out, transform 0.8s ease-out'
+            }}
           >
             <h2 className="text-4xl md:text-5xl section-title mb-8">
               {language === "en" ? "Projects" : "Projets"}
@@ -181,148 +437,26 @@ export default function Projects({ language = "en" }) {
                 ? "A showcase of my recent work and side projects"
                 : "Un aperçu de mes travaux récents et projets personnels"}
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => {
-              const title = project.title || project.titre
-              const { image, video } = getProjectAssets(title)
-              const isHovered = hoveredIndex === index
-              const isVisible = visibleIndex === index
-              // Sur mobile, utiliser isVisible, sur desktop utiliser isHovered
-              const shouldShowVideo = isMobile ? isVisible : isHovered
-
-              return (
-                <motion.div
-                  key={index}
-                  ref={(el) => (cardRefs.current[index] = el)}
-                  data-index={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  onHoverStart={() => !isMobile && setHoveredIndex(index)}
-                  onHoverEnd={() => !isMobile && setHoveredIndex(null)}
-                  className="group glass-card rounded-2xl overflow-hidden relative"
-                >
-                  {/* Project Image/Video Container */}
-                  {(image || video) && (
-                    <div className="relative w-full h-48 bg-black/50 overflow-hidden">
-                      {/* Cover Image */}
-                      {image && (
-                        <motion.img
-                          src={image}
-                          alt={title}
-                          className={cn(
-                            "w-full h-full object-cover transition-opacity duration-300",
-                            shouldShowVideo && video ? "opacity-0" : "opacity-100"
-                          )}
-                        />
-                      )}
-
-                      {/* Video on Hover (Desktop) or Scroll (Mobile) */}
-                      {video && (
-                        <motion.video
-                          ref={(el) => (videoRefs.current[index] = el)}
-                          src={video}
-                          muted
-                          loop
-                          playsInline
-                          className={cn(
-                            "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
-                            shouldShowVideo ? "opacity-100 z-10" : "opacity-0 z-0"
-                          )}
-                          onMouseEnter={() => !isMobile && handleVideoPlay(videoRefs.current[index])}
-                          onMouseLeave={() => !isMobile && handleVideoPause(videoRefs.current[index])}
-                        />
-                      )}
-
-                      {/* Overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent pointer-events-none z-20" />
-                    </div>
-                  )}
-
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                  {/* Content */}
-                  <div className="relative z-10 p-6">
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
-                      {title}
-                    </h3>
-
-                    <p className="text-gray-300 mb-6 leading-relaxed text-sm">
-                      {project.description}
-                    </p>
-
-                    {/* Tech stack */}
-                    {project.technologies && project.technologies.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {project.technologies.map((tech, techIndex) => (
-                          <span
-                            key={techIndex}
-                            className="px-3 py-1 text-xs rounded-full bg-primary/20 text-primary border border-primary/30"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Links */}
-                    <div className="flex flex-wrap gap-3">
-                      {/* Demo Video Button */}
-                      {video && (
-                        <button
-                          onClick={() => openVideoModal(video, title)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-medium transition-all duration-300 hover:scale-105"
-                        >
-                          <Play className="w-4 h-4" />
-                          {language === "en" ? "Demo" : "Démo"}
-                        </button>
-                      )}
-
-                      {(project.githubLink || project.lienGitHub) && (
-                        <a
-                          href={project.githubLink || project.lienGitHub}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-medium transition-all duration-300 hover:scale-105"
-                        >
-                          <Github className="w-4 h-4" />
-                          {language === "en" ? "Code" : "Code"}
-                        </a>
-                      )}
-
-                      {(project.demoLink || project.lienDemo) && (
-                        <a
-                          href={project.demoLink || project.lienDemo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-medium transition-all duration-300 hover:scale-105"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          {language === "en" ? "Live" : "Live"}
-                        </a>
-                      )}
-
-                      {(project.linkedinLink || project.lienLinkedIn) && (
-                        <a
-                          href={project.linkedinLink || project.lienLinkedIn}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-medium transition-all duration-300 hover:scale-105"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          {language === "en" ? "View" : "Voir"}
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              )
-            })}
+            {projects.map((project, index) => (
+              <ProjectCard
+                key={index}
+                project={project}
+                index={index}
+                language={language}
+                isMobile={isMobile}
+                hoveredIndex={hoveredIndex}
+                setHoveredIndex={setHoveredIndex}
+                visibleIndex={visibleIndex}
+                openVideoModal={openVideoModal}
+                videoRefs={videoRefs}
+                cardRefs={cardRefs}
+                onVideoPlay={onVideoPlay}
+                onVideoPause={onVideoPause}
+              />
+            ))}
           </div>
         </div>
       </section>

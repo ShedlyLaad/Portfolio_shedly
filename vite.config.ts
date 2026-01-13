@@ -22,9 +22,6 @@ export default defineConfig({
             if (id.includes('react') || id.includes('react-dom')) {
               return 'react-vendor'
             }
-            if (id.includes('framer-motion')) {
-              return 'framer-motion'
-            }
             if (id.includes('three')) {
               return 'three-vendor'
             }
@@ -52,7 +49,32 @@ export default defineConfig({
   },
   // Optimisations de performance
   optimizeDeps: {
-    include: ['react', 'react-dom', 'framer-motion', 'three'],
+    include: ['react', 'react-dom', 'three'],
     exclude: [],
+    force: true, // Force la réoptimisation si nécessaire
+    esbuildOptions: {
+      target: 'esnext',
+    },
+  },
+  // Optimisations supplémentaires pour les performances
+  esbuild: {
+    target: 'esnext',
+    legalComments: 'none',
+    minifyIdentifiers: true,
+    minifySyntax: true,
+    minifyWhitespace: true,
+  },
+  // Configuration du serveur de développement
+  server: {
+    port: 5173,
+    strictPort: false, // Permet d'utiliser un autre port si 5173 est occupé
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost',
+      // Port HMR sera automatiquement synchronisé avec le port du serveur
+    },
+    watch: {
+      usePolling: false,
+    },
   },
 })
