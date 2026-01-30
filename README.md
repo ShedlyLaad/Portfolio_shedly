@@ -34,4 +34,4 @@ GitHub: [ShedlyLaad](https://github.com/ShedlyLaad)
 
 ---
 
-© 2024 Chedly Laadhiby - Tous droits réservés
+© 2026 Chedly Laadhiby - Tous droits réservés
