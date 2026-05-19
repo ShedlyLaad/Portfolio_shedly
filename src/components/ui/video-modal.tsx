@@ -16,7 +16,6 @@ export function VideoModal({ isOpen, onClose, videoSrc, title }: VideoModalProps
     if (isOpen) {
       document.body.style.overflow = "hidden"
       setShouldRender(true)
-      // Trigger animation after render
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setIsVisible(true)
