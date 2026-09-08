@@ -12,10 +12,13 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    font-synthesis: none;
     scroll-behavior: smooth;
     overflow-x: hidden;
+    letter-spacing: -0.006em;
+    line-height: 1.65;
     /* Performance optimizations */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -25,6 +28,26 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 120px;
+  }
+
+  /* Editorial serif for every heading — consistent across the whole portfolio */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+  }
+
+  ::selection {
+    background: rgba(0, 102, 255, 0.28);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(0, 102, 255, 0.7);
+    outline-offset: 3px;
+    border-radius: 3px;
   }
 }
 

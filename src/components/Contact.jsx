@@ -110,10 +110,10 @@ export default function Contact({ language = "en" }) {
             transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s'
           }}
         >
-          <div 
-            className="rounded-3xl bg-gradient-to-br from-gray-800/80 to-gray-900/90 border border-white/10 shadow-2xl backdrop-blur-3xl overflow-hidden p-8 md:p-12 transition-all duration-500 hover:scale-[1.02]"
+          <div
+            className="rounded-3xl bg-gradient-to-br from-gray-800/70 to-gray-900/85 border border-white/10 backdrop-blur-2xl overflow-hidden p-8 md:p-12 transition-all duration-500 hover:scale-[1.01]"
             style={{
-              boxShadow: '0 0 50px rgba(0, 240, 255, 0.4), 0 0 80px rgba(20, 184, 166, 0.3), inset 0 0 40px rgba(16, 185, 129, 0.1)'
+              boxShadow: '0 30px 70px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 102, 255, 0.12)'
             }}
           >
             {/* Description text */}
@@ -238,39 +238,32 @@ export default function Contact({ language = "en" }) {
         </div>
       </div>
 
-      {/* Scroll to top button - Green/Cyan design */}
+      {/* Scroll to top button */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border-2 border-cyan-400/50 hover:border-cyan-400 text-white z-50 flex items-center justify-center group shadow-lg"
+          className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-background/80 backdrop-blur-md border border-primary/40 hover:border-primary/70 hover:bg-primary/15 text-white z-50 flex items-center justify-center group"
           style={{
-            willChange: 'transform, box-shadow',
-            transition: 'transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease',
-            boxShadow: '0 0 20px rgba(0, 240, 255, 0.3)',
-            animation: 'pulse-glow-contact 2s ease-in-out infinite'
+            willChange: 'transform',
+            transition: 'transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease',
+            boxShadow: '0 10px 30px -12px rgba(0, 0, 0, 0.6)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px) scale(1.1)'
-            e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 240, 255, 0.5)'
+            e.currentTarget.style.transform = 'translateY(-3px)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0) scale(1)'
-            e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.3)'
+            e.currentTarget.style.transform = 'translateY(0)'
           }}
           aria-label={language === "en" ? "Scroll to top" : "Retour en haut"}
         >
-          <ArrowUp className="w-6 h-6 text-cyan-400 transition-transform duration-300 group-hover:-translate-y-1" />
+          <ArrowUp className="w-5 h-5 text-primary-300 transition-transform duration-300 group-hover:-translate-y-0.5" />
         </button>
       )}
 
       <style>{`
         @keyframes pulse-glow-contact {
-          0%, 100% { 
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-          }
-          50% { 
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
-          }
+          0%, 100% { box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6); }
+          50% { box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6); }
         }
         @media (max-width: 768px) {
           .social-icon:hover {

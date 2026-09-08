@@ -37,8 +37,8 @@ export default function Footer({ language = "en" }) {
               alt="CL Logo" 
               loading="lazy"
               decoding="async"
-              className="h-7 md:h-8 w-auto opacity-90 hover:opacity-100 transition-all duration-300 filter drop-shadow-[0_0_8px_rgba(0,240,255,0.3)] hover:drop-shadow-[0_0_12px_rgba(0,240,255,0.5)]"
-              style={{ willChange: 'opacity, filter' }}
+              className="h-7 md:h-8 w-auto opacity-80 hover:opacity-100 transition-all duration-300"
+              style={{ willChange: 'opacity' }}
             />
             <div className="text-xs md:text-sm text-gray-400 font-medium">
               © {new Date().getFullYear()} Chedly Laadhiby - {copyrightText}
@@ -48,11 +48,11 @@ export default function Footer({ language = "en" }) {
           {/* Address and Protection */}
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
-              <MapPin className="w-3 h-3 md:w-4 md:h-4 text-cyan-400 flex-shrink-0" />
+              <MapPin className="w-3 h-3 md:w-4 md:h-4 text-primary-300 flex-shrink-0" />
               <span className="font-medium text-center">{address}</span>
             </div>
              <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <Shield className="w-3 h-3 text-cyan-400/50" />
+              <Shield className="w-3 h-3 text-primary-300/50" />
               <span>{protectedText}</span>
             </div> 
                       </div>

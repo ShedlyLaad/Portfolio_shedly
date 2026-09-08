@@ -51,10 +51,14 @@ export default {
         shine: "shine 3s ease-in-out infinite",
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-        futuristic: ['Orbitron', 'sans-serif'],
-        display: ['Rajdhani', 'sans-serif'],
+        sans: ['"Hanken Grotesk"', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        // "display" and legacy "futuristic" both resolve to the editorial serif
+        display: ['Fraunces', 'Georgia', 'Cambria', 'Times New Roman', 'serif'],
+        futuristic: ['Fraunces', 'Georgia', 'serif'],
+      },
+      letterSpacing: {
+        tightish: '-0.015em',
       },
     },
   },

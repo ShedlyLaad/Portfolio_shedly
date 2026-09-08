@@ -27,12 +27,7 @@ export default function Experience({ language = "en" }) {
 
         <div className="relative">
           {/* Modern vertical timeline with gradient - hidden on mobile */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-teal-400 to-emerald-400 transform -translate-x-1/2 rounded-full opacity-30" />
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 via-teal-500 to-emerald-500 transform -translate-x-1/2 rounded-full" 
-            style={{
-              boxShadow: '0 0 20px rgba(0, 240, 255, 0.5)',
-            }}
-          />
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-white/5 via-primary/40 to-white/5 transform -translate-x-1/2 rounded-full" />
 
           <div className="space-y-16">
             {experiences.map((exp, index) => {
@@ -72,23 +67,13 @@ export default function Experience({ language = "en" }) {
                       }
                     }}
                   >
-                    {/* Outer glow */}
-                    <div
-                      className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 blur-lg -z-10"
-                      style={{
-                        willChange: 'opacity, transform',
-                        animation: `pulse-glow-exp 2s ease-in-out infinite`,
-                        animationDelay: `${index * 0.3}s`
-                      }}
-                    />
-                    
                     {/* Icon container */}
-                    <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 backdrop-blur-lg border-2 border-cyan-400/50 flex items-center justify-center shadow-lg"
+                    <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-primary/12 backdrop-blur-lg border border-primary/40 flex items-center justify-center"
                       style={{
-                        boxShadow: '0 0 30px rgba(0, 240, 255, 0.5), inset 0 0 20px rgba(16, 185, 129, 0.2)',
+                        boxShadow: '0 8px 24px -10px rgba(0, 102, 255, 0.4)',
                       }}
                     >
-                      <Briefcase className="w-4 h-4 md:w-7 md:h-7 text-cyan-400" />
+                      <Briefcase className="w-4 h-4 md:w-7 md:h-7 text-primary-300" />
                     </div>
                   </div>
                 </div>

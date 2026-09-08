@@ -1,18 +1,22 @@
-import { X } from "lucide-react"
-import { useEffect } from "react"
+import { X, Download, AlertCircle } from "lucide-react"
+import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
 interface VideoModalProps {
   isOpen: boolean
   onClose: () => void
   videoSrc: string | null
+  poster?: string
   title?: string
 }
 
-export function VideoModal({ isOpen, onClose, videoSrc, title }: VideoModalProps) {
+export function VideoModal({ isOpen, onClose, videoSrc, poster, title }: VideoModalProps) {
+  const [errored, setErrored] = useState(false)
+
   useEffect(() => {
     if (!isOpen) return
 
+    setErrored(false)
     document.body.style.overflow = "hidden"
 
     const handleEscape = (e: KeyboardEvent) => {
@@ -50,16 +54,38 @@ export function VideoModal({ isOpen, onClose, videoSrc, title }: VideoModalProps
         </div>
 
         <div className="aspect-video w-full bg-black">
-          <video
-            key={videoSrc}
-            src={videoSrc}
-            controls
-            autoPlay
-            className="h-full w-full object-contain"
-            onEnded={onClose}
-          >
-            Your browser does not support the video tag.
-          </video>
+          {errored ? (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-6 text-center text-gray-300">
+              <AlertCircle className="h-8 w-8 text-primary" />
+              <p className="text-sm">
+                The demo video couldn&apos;t be loaded right now.
+              </p>
+              <a
+                href={videoSrc}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-primary/50 bg-primary/20 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/30"
+              >
+                <Download className="h-4 w-4" />
+                Open video in a new tab
+              </a>
+            </div>
+          ) : (
+            <video
+              key={videoSrc}
+              src={videoSrc}
+              poster={poster}
+              controls
+              autoPlay
+              playsInline
+              preload="metadata"
+              className="h-full w-full object-contain"
+              onEnded={onClose}
+              onError={() => setErrored(true)}
+            >
+              Your browser does not support the video tag.
+            </video>
+          )}
         </div>
       </div>
     </div>,

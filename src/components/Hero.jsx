@@ -193,23 +193,20 @@ export default function Hero({ language = "en" }) {
             >
               <button
                 onClick={handleScroll}
-                className="group relative w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border-2 border-cyan-400/50 hover:border-cyan-400 text-white font-semibold flex items-center justify-center"
+                className="group relative w-14 h-14 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/40 hover:border-primary/70 text-white font-semibold flex items-center justify-center"
                 style={{
                   willChange: 'transform',
-                  transition: 'transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
-                  boxShadow: '0 0 20px rgba(0, 240, 255, 0.3)'
+                  transition: 'transform 0.3s ease, background 0.3s ease, border-color 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.1)'
-                  e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 240, 255, 0.5)'
+                  e.currentTarget.style.transform = 'scale(1.08)'
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)'
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 240, 255, 0.3)'
                 }}
                 aria-label={language === "en" ? "View Projects" : "Voir Projets"}
               >
-                <ArrowDown className="w-6 h-6 text-cyan-400 transition-transform duration-300 group-hover:translate-y-1" />
+                <ArrowDown className="w-5 h-5 text-primary-300 transition-transform duration-300 group-hover:translate-y-1" />
               </button>
 
               <button
@@ -344,8 +341,8 @@ export default function Hero({ language = "en" }) {
           50% { transform: translate(-50%, -50%) scale(1.03); }
         }
         @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.5); }
+          0%, 100% { box-shadow: 0 0 0 1px rgba(0, 102, 255, 0.25), 0 18px 50px -20px rgba(0, 102, 255, 0.35); }
+          50% { box-shadow: 0 0 0 1px rgba(0, 102, 255, 0.4), 0 22px 60px -18px rgba(0, 102, 255, 0.5); }
         }
         @keyframes float-particle {
           0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.4; }

@@ -5,64 +5,106 @@ import { VideoModal } from "./ui/video-modal"
 import { cn } from "../lib/utils"
 import { useInView } from "../hooks/useInView"
 
-// Import project images
-import jobBoardImage from "../assets/Projects/Job-Board.png"
-import ekitabImage from "../assets/Projects/Ekitab.png"
-import dewiniImage from "../assets/Projects/dewini.png"
-import sneakerHubImage from "../assets/Projects/SneakerHub.png"
-import excelleMangerImage from "../assets/Projects/ExcelleManger.png"
-import bigsImage from "../assets/Projects/Bigs.png"
-import bitchestImage from "../assets/Projects/Bitchest.png"
+// Optimized project cover images (WebP, hashed by Vite) + video poster frames.
+// Regenerate with: npm run optimize:media
+import jobBoardImage from "../assets/Projects/optimized/job-board.webp"
+import ekitabImage from "../assets/Projects/optimized/ekitab.webp"
+import dewiniImage from "../assets/Projects/optimized/dewini.webp"
+import sneakerHubImage from "../assets/Projects/optimized/sneakerhub.webp"
+import excelleMangerImage from "../assets/Projects/optimized/excellemanger.webp"
+import bigsImage from "../assets/Projects/optimized/bigscreen.webp"
+import bitchestImage from "../assets/Projects/optimized/bitchest.webp"
 
-// Import project videos
-import bitchestVideo from "../assets/Projects/BitchestDemo.mp4"
-import bigsVideo from "../assets/Projects/BigS_vid.mp4"
-import dewiniVideo from "../assets/Projects/Dewini_Vid.mp4"
-import ekitabVideo from "../assets/Projects/Ekitab_Vid.mp4"
-import excelVideo from "../assets/Projects/Excel_Vid.mp4"
+import bitchestPoster from "../assets/Projects/optimized/bitchest-poster.jpg"
+import bigsPoster from "../assets/Projects/optimized/bigscreen-poster.jpg"
+import dewiniPoster from "../assets/Projects/optimized/dewini-poster.jpg"
+import ekitabPoster from "../assets/Projects/optimized/ekitab-poster.jpg"
+import excelPoster from "../assets/Projects/optimized/excellemanger-poster.jpg"
+
+// Compressed demo videos live in /public/videos and are served from a stable,
+// deploy-safe absolute path (long-lived CDN cache set in vercel.json).
+const VIDEO_BASE = "/videos"
+
+// Resolve a project title (EN or FR) to a stable slug.
+const getProjectSlug = (title) => {
+  const key = title?.toLowerCase().replace(/\s+/g, "-")
+  const slugMap = {
+    "job-board-ch": "job-board",
+    "e-kitab": "ekitab",
+    "ekitab": "ekitab",
+    "dewini": "dewini",
+    "sneakerhub": "sneakerhub",
+    "excellemanger": "excellemanger",
+    "bigscreen-sondage": "bigscreen",
+    "bigscreen-survey": "bigscreen",
+    "bigs": "bigscreen",
+    "bitchest": "bitchest",
+  }
+  return slugMap[key] || null
+}
 
 // Mapping helper function
 const getProjectAssets = (title) => {
-  const titleLower = title?.toLowerCase().replace(/\s+/g, "-")
-  
+  const slug = getProjectSlug(title)
+
   const imageMap = {
-    "job-board-ch": jobBoardImage,
-    "e-kitab": ekitabImage,
+    "job-board": jobBoardImage,
     "ekitab": ekitabImage,
     "dewini": dewiniImage,
     "sneakerhub": sneakerHubImage,
     "excellemanger": excelleMangerImage,
-    "bigscreen-sondage": bigsImage,
-    "bigscreen-survey": bigsImage,
-    "bigs": bigsImage,
+    "bigscreen": bigsImage,
     "bitchest": bitchestImage,
   }
 
-  const videoMap = {
-    "bitchest": bitchestVideo,
-    "bigscreen-sondage": bigsVideo,
-    "bigscreen-survey": bigsVideo,
-    "bigs": bigsVideo,
-    "dewini": dewiniVideo,
-    "e-kitab": ekitabVideo,
-    "ekitab": ekitabVideo,
-    "excellemanger": excelVideo,
+  // Only these projects have a recorded demo (sneakerhub / job-board don't).
+  const posterMap = {
+    "bitchest": bitchestPoster,
+    "bigscreen": bigsPoster,
+    "dewini": dewiniPoster,
+    "ekitab": ekitabPoster,
+    "excellemanger": excelPoster,
   }
 
   return {
-    image: imageMap[titleLower] || null,
-    video: videoMap[titleLower] || null,
+    image: imageMap[slug] || null,
+    video: posterMap[slug] ? `${VIDEO_BASE}/${slug}.mp4` : null,
+    poster: posterMap[slug] || null,
   }
 }
 
 // Project Card Component with React.memo
 const ProjectCard = memo(({ project, index, language, isMobile, hoveredIndex, setHoveredIndex, visibleIndex, openVideoModal, videoRefs, cardRefs, onVideoPlay, onVideoPause }) => {
   const title = project.title || project.titre
-  const { image, video } = getProjectAssets(title)
+  const { image, video, poster } = getProjectAssets(title)
   const isHovered = hoveredIndex === index
   const isVisible = visibleIndex === index
   const shouldShowVideo = isMobile ? isVisible : isHovered
   const { ref: inViewRef, isInView } = useInView({ threshold: 0.1, rootMargin: "-50px", triggerOnce: true })
+
+  // Load the video file only once it is actually needed (hover / in view on
+  // mobile). Falls back silently to the cover image if the video can't load.
+  const [videoRequested, setVideoRequested] = useState(false)
+  const [videoError, setVideoError] = useState(false)
+  useEffect(() => {
+    if (shouldShowVideo && !videoError) setVideoRequested(true)
+  }, [shouldShowVideo, videoError])
+  const showVideoLayer = shouldShowVideo && video && !videoError
+
+  // Drive playback from state rather than mouse events (more reliable once the
+  // element swaps in after a lazy src assignment).
+  useEffect(() => {
+    const el = videoRefs.current?.[index]
+    if (!el) return
+    el.muted = true
+    if (showVideoLayer && videoRequested) {
+      const p = el.play()
+      if (p && typeof p.catch === "function") p.catch(() => {})
+    } else {
+      el.pause()
+      el.currentTime = 0
+    }
+  }, [showVideoLayer, videoRequested, index, videoRefs])
   
   // Store cardRefs in a ref to avoid dependency issues
   const cardRefsRef = useRef(cardRefs)
@@ -112,34 +154,39 @@ const ProjectCard = memo(({ project, index, language, isMobile, hoveredIndex, se
       {/* Project Image/Video Container */}
       {(image || video) && (
         <div className="relative w-full h-48 bg-black/50 overflow-hidden">
-          {/* Cover Image */}
+          {/* Cover Image (always the reliable base layer / video fallback) */}
           {image && (
             <img
               src={image}
               alt={title}
+              width="1000"
+              height="563"
               loading="lazy"
               decoding="async"
               className={cn(
-                "w-full h-full object-cover transition-opacity duration-300",
-                shouldShowVideo && video ? "opacity-0" : "opacity-100"
+                "w-full h-full object-cover transition-opacity duration-500",
+                showVideoLayer ? "opacity-0" : "opacity-100"
               )}
               style={{ willChange: 'opacity' }}
             />
           )}
 
-          {/* Video on Hover (Desktop) or Scroll (Mobile) */}
+          {/* Video on Hover (Desktop) or Scroll (Mobile) — lazily loaded */}
           {video && (
             <video
               ref={(el) => (videoRefs.current[index] = el)}
-              src={video}
+              src={videoRequested ? video : undefined}
+              poster={poster || undefined}
               muted
               loop
               playsInline
+              preload="none"
               className={cn(
-                "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
-                shouldShowVideo ? "opacity-100 z-10" : "opacity-0 z-0"
+                "absolute inset-0 w-full h-full object-cover transition-opacity duration-500",
+                showVideoLayer ? "opacity-100 z-10" : "opacity-0 z-0"
               )}
               style={{ willChange: 'opacity' }}
+              onError={() => setVideoError(true)}
               onMouseEnter={() => !isMobile && onVideoPlay(index)}
               onMouseLeave={() => !isMobile && onVideoPause(index)}
             />
@@ -182,7 +229,7 @@ const ProjectCard = memo(({ project, index, language, isMobile, hoveredIndex, se
           {/* Demo Video Button */}
           {video && (
             <button
-              onClick={() => openVideoModal(video, title)}
+              onClick={() => openVideoModal(video, title, poster)}
               className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 text-primary text-sm font-medium transition-all duration-300"
               style={{
                 willChange: 'transform',
@@ -277,6 +324,7 @@ export default function Projects({ language = "en" }) {
   const projects = data.projets[language]
   const [selectedVideo, setSelectedVideo] = useState(null)
   const [selectedTitle, setSelectedTitle] = useState(null)
+  const [selectedPoster, setSelectedPoster] = useState(null)
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [visibleIndex, setVisibleIndex] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
@@ -357,16 +405,18 @@ export default function Projects({ language = "en" }) {
     }
   }, [hoveredIndex, isMobile])
 
-  const openVideoModal = (videoSrc, title) => {
+  const openVideoModal = (videoSrc, title, posterSrc) => {
     if (videoSrc) {
       setSelectedVideo(videoSrc)
       setSelectedTitle(title)
+      setSelectedPoster(posterSrc || null)
     }
   }
 
   const closeVideoModal = () => {
     setSelectedVideo(null)
     setSelectedTitle(null)
+    setSelectedPoster(null)
   }
 
   const onVideoPlay = (index) => {
@@ -439,6 +489,7 @@ export default function Projects({ language = "en" }) {
         isOpen={!!selectedVideo}
         onClose={closeVideoModal}
         videoSrc={selectedVideo}
+        poster={selectedPoster || undefined}
         title={selectedTitle || undefined}
       />
     </>

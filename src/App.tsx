@@ -1,10 +1,14 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
-import { DottedSurface } from './components/ui/dotted-surface'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Copyright from './components/Copyright'
 import Hero from './components/Hero'
+
+// Lazy load the decorative WebGL background (keeps three.js off the critical path)
+const DottedSurface = lazy(() =>
+  import('./components/ui/dotted-surface').then((m) => ({ default: m.DottedSurface })),
+)
 
 // Lazy load heavy sections
 const About = lazy(() => import('./components/About'))
@@ -32,8 +36,10 @@ function App() {
     <ThemeProvider>
       <Copyright />
       <div className="min-h-screen text-foreground relative overflow-x-hidden">
-        {/* Global animated background - covers entire page */}
-        <DottedSurface className="fixed inset-0 w-full h-full" />
+        {/* Global animated background - covers entire page (deferred, non-blocking) */}
+        <Suspense fallback={null}>
+          <DottedSurface className="fixed inset-0 w-full h-full" />
+        </Suspense>
         
         {/* Background overlay for readability - optimized to show dots */}
         <div className="fixed inset-0 bg-background/50 backdrop-blur-[0.5px] -z-[5]" />

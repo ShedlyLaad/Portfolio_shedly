@@ -68,7 +68,7 @@ export default function About({ language = "en" }) {
           {/* Subtitle */}
           <p
             ref={subtitleRef}
-            className="text-xl md:text-2xl text-gray-400 font-display font-light tracking-wide"
+            className="text-xl md:text-2xl text-gray-400 font-display font-normal italic"
             style={{
               opacity: subtitleInView ? 1 : 0,
               willChange: 'opacity',
@@ -113,7 +113,7 @@ export default function About({ language = "en" }) {
             <div
               className="glass-card rounded-2xl p-8 md:p-10 border-l-4"
               style={{
-                borderLeftColor: '#00F0FF',
+                borderLeftColor: '#0066FF',
                 borderLeftWidth: '4px',
                 opacity: leftInView ? 1 : 0,
                 transform: leftInView ? 'translate3d(0, 0, 0)' : 'translate3d(0, 20px, 0)',

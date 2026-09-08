@@ -100,7 +100,7 @@ export function AnimeNavBar({ items, className, defaultActive = "Home", onNavCli
               alt="CL Logo" 
               loading="eager"
               decoding="async"
-              className="h-7 w-7 md:h-8 md:w-8 opacity-95 hover:opacity-100 transition-all duration-300 filter drop-shadow-[0_0_6px_rgba(0,240,255,0.4)] hover:drop-shadow-[0_0_10px_rgba(0,240,255,0.6)]"
+              className="h-7 w-7 md:h-8 md:w-8 opacity-90 hover:opacity-100 transition-all duration-300"
               style={{ 
                 willChange: 'transform, opacity',
                 transition: 'opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease'
