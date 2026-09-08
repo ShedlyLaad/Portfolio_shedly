@@ -55,22 +55,6 @@ const getProjectAssets = (title) => {
   }
 }
 
-// Helper functions for video control
-const handleVideoPlay = (video) => {
-  if (video) {
-    video.play().catch(() => {
-      // Handle autoplay restrictions
-    })
-  }
-}
-
-const handleVideoPause = (video) => {
-  if (video) {
-    video.pause()
-    video.currentTime = 0
-  }
-}
-
 // Project Card Component with React.memo
 const ProjectCard = memo(({ project, index, language, isMobile, hoveredIndex, setHoveredIndex, visibleIndex, openVideoModal, videoRefs, cardRefs, onVideoPlay, onVideoPause }) => {
   const title = project.title || project.titre
@@ -372,21 +356,6 @@ export default function Projects({ language = "en" }) {
       })
     }
   }, [hoveredIndex, isMobile])
-
-  const handleVideoPlay = (video) => {
-    if (video) {
-      video.play().catch(() => {
-        // Handle autoplay restrictions
-      })
-    }
-  }
-
-  const handleVideoPause = (video) => {
-    if (video) {
-      video.pause()
-      video.currentTime = 0
-    }
-  }
 
   const openVideoModal = (videoSrc, title) => {
     if (videoSrc) {
