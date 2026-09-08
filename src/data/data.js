@@ -292,6 +292,13 @@ export const data = {
     "projets": {
       "fr": [
         {
+          "titre": "BitChest",
+          "description": "BitChest est une application web full-stack dédiée à la simulation du trading et à la gestion de portefeuilles de cryptomonnaies. Développée avec Laravel pour le backend et Vue 3 avec TypeScript pour le frontend, la plateforme permet aux utilisateurs de suivre les marchés, de gérer un solde virtuel en euros et d’effectuer des opérations d’achat et de vente de cryptomonnaies. Elle propose deux interfaces dédiées : un espace utilisateur pour la gestion du portefeuille, le suivi du marché, l’historique des transactions et la gestion du compte, ainsi qu’un espace administrateur permettant de gérer les utilisateurs, consulter les statistiques, suivre les transactions et gérer les cotations. Le projet intègre également un assistant de support bilingue basé sur FastAPI et Groq. L’application utilise MySQL, Laravel Sanctum, Pinia, Vite et Tailwind CSS.",
+          "lienGitHub": "https://github.com/ShedlyLaad/bitchest_wallet025",
+          "lienDemo": null,
+          "technologies": ["Laravel", "Vue 3", "TypeScript", "MySQL", "FastAPI", "Tailwind CSS"]
+        },
+        {
           "titre": "Job-Board-Ch",
           "description": "JOB-Board-CH est une plateforme web conçue pour faciliter la recherche d'emploi des jeunes diplômés. Le projet propose une expérience utilisateur fluide et personnalisée, intégrant des fonctionnalités innovantes telles que : création de profils candidats et entreprises, gestion des offres d'emploi, tableau de bord interactif pour suivre les candidatures, et moteur de recherche avancé. L'objectif est de connecter efficacement les talents émergents aux opportunités professionnelles adaptées à leurs profils.",
           "lienGitHub": "https://github.com/ShedlyLaad/Job-Board-Ch",
@@ -336,6 +343,13 @@ export const data = {
         }
       ],
       "en": [
+        {
+          "title": "BitChest",
+          "description": "BitChest is a full-stack web application designed to simulate cryptocurrency trading and portfolio management. Built with Laravel for the backend and Vue 3 with TypeScript for the frontend, the platform provides a secure environment where users can monitor cryptocurrency markets, manage a virtual euro balance, and perform buy and sell transactions. It features two dedicated interfaces: a user space for portfolio management, market tracking, transaction history and account settings, and an administration space for user management, platform statistics, transaction monitoring and cryptocurrency price management. The application also integrates a bilingual AI-powered support assistant using FastAPI and Groq. The project uses MySQL, Laravel Sanctum, Pinia, Vite and Tailwind CSS.",
+          "githubLink": "https://github.com/ShedlyLaad/bitchest_wallet025",
+          "demoLink": null,
+          "technologies": ["Laravel", "Vue 3", "TypeScript", "MySQL", "FastAPI", "Tailwind CSS"]
+        },
         {
           "title": "Job-Board-Ch",
           "description": "JOB-Board-CH is a web platform designed to facilitate job searching for recent graduates. The project offers a smooth and personalized user experience, integrating innovative features such as: candidate and company profile creation, job posting management, interactive dashboard to track applications, and advanced search engine. The goal is to efficiently connect emerging talents with professional opportunities suited to their profiles.",

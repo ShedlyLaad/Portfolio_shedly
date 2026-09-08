@@ -12,8 +12,10 @@ import dewiniImage from "../assets/Projects/dewini.png"
 import sneakerHubImage from "../assets/Projects/SneakerHub.png"
 import excelleMangerImage from "../assets/Projects/ExcelleManger.png"
 import bigsImage from "../assets/Projects/Bigs.png"
+import bitchestImage from "../assets/Projects/Bitchest.png"
 
 // Import project videos
+import bitchestVideo from "../assets/Projects/BitchestDemo.mp4"
 import bigsVideo from "../assets/Projects/BigS_vid.mp4"
 import dewiniVideo from "../assets/Projects/Dewini_Vid.mp4"
 import ekitabVideo from "../assets/Projects/Ekitab_Vid.mp4"
@@ -33,9 +35,11 @@ const getProjectAssets = (title) => {
     "bigscreen-sondage": bigsImage,
     "bigscreen-survey": bigsImage,
     "bigs": bigsImage,
+    "bitchest": bitchestImage,
   }
 
   const videoMap = {
+    "bitchest": bitchestVideo,
     "bigscreen-sondage": bigsVideo,
     "bigscreen-survey": bigsVideo,
     "bigs": bigsVideo,
